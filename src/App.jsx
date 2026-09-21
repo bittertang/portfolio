@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
+import posthog from "posthog-js";
 import Home from "./pages/Home";
 import Works from "./pages/Works";
 import CaseStudy from "./pages/CaseStudy";
@@ -10,6 +11,16 @@ import Playground from "./pages/Playground";
 // scroll position. Everything else (opening or leaving a case study) starts at
 // the top.
 const TAB_PATHS = ["/", "/playground", "/about"];
+
+function PageViewTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    posthog.capture("$pageview");
+  }, [location]);
+
+  return null;
+}
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -28,6 +39,7 @@ export default function App() {
   return (
     <div className="min-h-screen pb-12">
       <ScrollToTop />
+      <PageViewTracker />
       <Routes>
         <Route element={<Home />}>
           <Route path="/" element={<Works />} />
