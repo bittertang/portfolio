@@ -141,7 +141,7 @@ function MediaItem({ item, pos, raised }) {
           className={`pointer-events-none relative col-start-2 -translate-x-2 py-1 opacity-0 transition duration-300 ease-out group-hover:translate-x-0 group-focus-within:translate-x-0 ${shown}`}
           style={hideCard}
         >
-          <h2 className="font-serif text-3xl font-semibold text-gray-900">{card.title}</h2>
+          <h2 className="font-serif text-3xl font-light text-gray-900">{card.title}</h2>
           <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-gray-600">{card.description}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             {card.tags.map((tag) => (
@@ -257,7 +257,7 @@ export default function Playground() {
       onPointerMove={onPointerMove}
       onPointerUp={endDrag}
       onPointerCancel={endDrag}
-      className={`relative h-[calc(100vh-18rem)] min-h-[26rem] w-full select-none overflow-hidden bg-white ${
+      className={`relative h-screen min-h-[26rem] w-full select-none overflow-hidden bg-white ${
         dragging ? "cursor-grabbing" : "cursor-grab"
       }`}
       style={{

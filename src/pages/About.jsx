@@ -1,34 +1,8 @@
-import { useEffect, useState } from "react";
 import headshot from "../assets/about/headshot.webp";
 import arlo from "../assets/about/arlo.webp";
+import Typewriter from "../components/Typewriter";
 
 const TITLE = "Problem solver, games enthusiast, & arts and crafts dabbler";
-
-// Types the text out one character at a time. The full text is rendered
-// invisibly underneath so the layout doesn't shift as it fills in.
-function Typewriter({ text, speed = 45 }) {
-  const [count, setCount] = useState(() =>
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches ? text.length : 0,
-  );
-
-  useEffect(() => {
-    if (count >= text.length) return;
-    const id = setTimeout(() => setCount(count + 1), speed);
-    return () => clearTimeout(id);
-  }, [count, text, speed]);
-
-  return (
-    <h1 aria-label={text} className="relative font-serif text-3xl font-semibold text-gray-900">
-      <span aria-hidden="true" className="invisible">
-        {text}
-      </span>
-      <span aria-hidden="true" className="absolute inset-0">
-        {text.slice(0, count)}
-        <span className="ml-0.5 inline-block h-[0.9em] w-[2px] translate-y-[0.1em] animate-caret bg-gray-900" />
-      </span>
-    </h1>
-  );
-}
 
 export default function About() {
   return (
@@ -38,7 +12,11 @@ export default function About() {
           <img src={headshot} alt="Ivy" className="aspect-square w-full object-cover" />
         </div>
         <div className="flex flex-1 flex-col gap-4 text-sm leading-relaxed text-gray-700">
-          <Typewriter text={TITLE} />
+          <Typewriter
+            as="h1"
+            text={TITLE}
+            className="font-serif text-3xl font-light text-gray-900"
+          />
           <p>
             Hi, I’m Ivy, a designer based in the Bay Area! I have a background in Cognitive Science, and it’s
             something I bring with me whenever I think about how users think, behave, and interact.

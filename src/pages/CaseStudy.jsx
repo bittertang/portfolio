@@ -77,16 +77,14 @@ function Block({ id, eyebrow, title, children }) {
   );
 }
 
-// Wraps an image (real or placeholder) so clicking it opens the lightbox.
-function Zoomable({ onClick, className = "", children }) {
+// Plain layout wrapper around an image (real or placeholder) — no longer
+// clickable/zoomable; kept as its own component since every call site still
+// passes it a layout className and children.
+function Zoomable({ id, className = "", children }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`block w-full cursor-zoom-in border-0 p-0 text-left ${className}`}
-    >
+    <div id={id} className={`block w-full ${className}`}>
       {children}
-    </button>
+    </div>
   );
 }
 
@@ -1389,7 +1387,7 @@ function MediaGrid({ items, onImageClick, aspect = "aspect-video", grey = false 
 // Used both by the routed CaseStudy page and by LinkedCaseStudyModal, which
 // renders a child project's full case study inside an overlay without
 // changing the URL.
-function CaseStudyContent({ project, isModal = false, scrollContainerRef }) {
+function CaseStudyContent({ project, isModal = false, scrollContainerRef, isExpanded = false }) {
   const [lightboxImage, setLightboxImage] = useState(null);
   const openLightbox = (image) => setLightboxImage(image);
   const [openLinkedSlug, setOpenLinkedSlug] = useState(null);
@@ -1468,8 +1466,8 @@ function CaseStudyContent({ project, isModal = false, scrollContainerRef }) {
   };
 
   return (
-    <div className="mx-auto grid max-w-[1800px] lg:grid-cols-[220px_1fr]">
-      <aside className="border-b border-gray-200 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto lg:border-b-0">
+    <div className="mx-auto grid max-w-[1800px] lg:grid-cols-[360px_1fr]">
+      <aside className="border-b border-gray-200 bg-white lg:border-b-0">
         <CaseStudySidebar
           project={project}
           subsections={subsections}
@@ -1481,7 +1479,16 @@ function CaseStudyContent({ project, isModal = false, scrollContainerRef }) {
       <main className="py-4 pl-1 pr-2 lg:py-6 lg:pl-0 lg:pr-6">
         <Block id="overview">
           <Zoomable
-            className="max-w-5xl"
+            id="hero-image"
+            className={`max-w-5xl mb-6 ${
+              isModal && (project.heroVideoCompact || project.heroImageCompact)
+                ? isExpanded
+                  ? "flex min-h-[calc(100vh-69px)] items-center justify-center"
+                  : "flex min-h-[calc(90vh-69px)] items-center justify-center"
+                : !isModal && project.heroNoPeek
+                  ? "flex min-h-[calc(100vh-24px)] items-center justify-center"
+                  : ""
+            }`}
             onClick={() =>
               openLightbox(
                 project.heroVideo
@@ -1500,9 +1507,17 @@ function CaseStudyContent({ project, isModal = false, scrollContainerRef }) {
                 muted
                 playsInline
                 className={
-                  project.heroVideoCompact
-                    ? "mx-auto block max-h-96 w-auto rounded-lg"
-                    : "block h-auto w-full rounded-lg"
+                  isModal
+                    ? project.heroVideoCompact
+                      ? "block h-[50vh] w-full rounded-lg object-cover"
+                      : isExpanded
+                        ? "block h-[calc(100vh-90px)] w-full rounded-lg object-cover"
+                        : "block h-[calc(90vh-90px)] w-full rounded-lg object-cover"
+                    : project.heroVideoTall
+                      ? "block h-[90vh] w-full rounded-lg object-cover"
+                      : project.heroVideoCompact
+                        ? "mx-auto block max-h-96 w-auto rounded-lg"
+                        : "block h-auto w-full rounded-lg"
                 }
               />
             ) : project.heroImage ? (
@@ -1510,50 +1525,24 @@ function CaseStudyContent({ project, isModal = false, scrollContainerRef }) {
                 src={project.heroImage}
                 alt={`${project.title} hero mockup`}
                 className={
-                  project.heroImageCompact
-                    ? "mx-auto block max-h-64 w-auto rounded-lg"
-                    : "h-auto w-full rounded-lg"
+                  isModal
+                    ? project.heroImageCompact
+                      ? "block h-[50vh] w-full rounded-lg object-cover"
+                      : isExpanded
+                        ? "block h-[calc(100vh-90px)] w-full rounded-lg object-cover"
+                        : "block h-[calc(90vh-90px)] w-full rounded-lg object-cover"
+                    : project.heroImageFull
+                      ? "block h-[90vh] w-full rounded-lg object-contain"
+                      : project.heroImageCompact
+                        ? "mx-auto block max-h-64 w-auto rounded-lg"
+                        : "h-auto w-full rounded-lg"
                 }
               />
             ) : (
               <PlaceholderImage label="[Hero screenshot]" className="aspect-video w-full" />
             )}
           </Zoomable>
-          <h1 className="font-serif mt-8 text-4xl font-light sm:text-5xl">{project.title}</h1>
-          <p className="mt-3 max-w-xl text-lg text-gray-600">{project.tagline}</p>
-          {project.tags && project.tags.length > 0 && (
-            <div className="mt-3 flex flex-wrap gap-2">
-              {project.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-gray-300 px-3 py-1 text-xs uppercase tracking-wide text-gray-600"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
           <MediaGrid items={project.media?.overview} onImageClick={openLightbox} />
-          <div className="mt-8 grid max-w-5xl grid-cols-2 gap-6 sm:grid-cols-4">
-            <div>
-              <p className="text-xs uppercase tracking-widest text-gray-500">Role</p>
-              <p className="mt-1 whitespace-pre-line text-sm">{project.meta.role}</p>
-            </div>
-            {project.meta.tools && (
-              <div>
-                <p className="text-xs uppercase tracking-widest text-gray-500">Tools</p>
-                <p className="mt-1 whitespace-pre-line text-sm">{project.meta.tools}</p>
-              </div>
-            )}
-            <div>
-              <p className="text-xs uppercase tracking-widest text-gray-500">Timeline</p>
-              <p className="mt-1 text-sm">{project.meta.timeline}</p>
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-widest text-gray-500">Team</p>
-              <p className="mt-1 whitespace-pre-line text-sm">{project.meta.team}</p>
-            </div>
-          </div>
           {!project.hideTldr && (
             <div className="mt-8 flex max-w-5xl flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
               {project.tldrImage && (
@@ -1594,7 +1583,7 @@ function CaseStudyContent({ project, isModal = false, scrollContainerRef }) {
           )}
           {project.impact && <ImpactCard impact={project.impact} />}
           {project.linkedCaseStudies && project.linkedCaseStudies.length > 0 && (
-            <div className="mt-8 grid max-w-5xl gap-4 sm:grid-cols-2">
+            <div className="mt-8 grid max-w-6xl gap-6 sm:grid-cols-2">
               {project.linkedCaseStudies.map((slug) => {
                 const linked = projects.find((p) => p.slug === slug);
                 if (!linked) return null;
@@ -1602,8 +1591,8 @@ function CaseStudyContent({ project, isModal = false, scrollContainerRef }) {
                   <ProjectTile
                     key={slug}
                     project={linked}
+                    imageHeight="h-72"
                     onClick={() => setOpenLinkedSlug(slug)}
-                    alwaysExpanded
                   />
                 );
               })}
@@ -1673,7 +1662,7 @@ function CaseStudyContent({ project, isModal = false, scrollContainerRef }) {
                   className="mt-6 flex max-w-5xl flex-col gap-4 sm:flex-row sm:items-center sm:gap-8"
                 >
                   <div className="sm:w-56 sm:shrink-0">
-                    <p className="font-serif text-2xl font-semibold text-gray-900">{feature.label}</p>
+                    <p className="font-serif text-2xl font-light text-gray-900">{feature.label}</p>
                     {feature.description && (
                       <p className="mt-2 text-sm leading-relaxed text-gray-700">
                         {feature.description}
@@ -2546,7 +2535,7 @@ function CaseStudyContent({ project, isModal = false, scrollContainerRef }) {
                   </Zoomable>
                 </div>,
                 <div key={`text-${i}`}>
-                  <p className="font-serif text-2xl font-semibold text-gray-900">{item.label}</p>
+                  <p className="font-serif text-2xl font-light text-gray-900">{item.label}</p>
                   <p className="mt-2 text-sm leading-relaxed text-gray-700">{item.description}</p>
                 </div>,
               ])}
@@ -2601,7 +2590,7 @@ function CaseStudyContent({ project, isModal = false, scrollContainerRef }) {
                   </Zoomable>
                 ),
                 <div key={`text-${i}`}>
-                  <p className="font-serif text-xl font-semibold">{feature.label}</p>
+                  <p className="font-serif text-xl font-light">{feature.label}</p>
                   <p className="mt-2 text-sm leading-relaxed text-gray-700">
                     {feature.description}
                   </p>
@@ -2716,11 +2705,15 @@ function CaseStudyContent({ project, isModal = false, scrollContainerRef }) {
 }
 
 // Overlay showing a linked project's full case study without navigating away
-// from the parent page. Starts as a large centered dialog with an option to
-// expand to fill the screen; the back button always closes the overlay.
+// from the parent page. Starts as a large centered dialog with a toggle to
+// grow it to fill the screen; the back button always closes the overlay.
+// The dialog stays `fixed` in both states (only its inset/size/radius
+// change) so the grow/shrink is a plain, smoothly-animatable CSS transition
+// rather than a jump cut.
 function LinkedCaseStudyModal({ slug, onClose }) {
   const linkedProject = projects.find((p) => p.slug === slug);
   const scrollContainerRef = useRef(null);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -2733,13 +2726,14 @@ function LinkedCaseStudyModal({ slug, onClose }) {
   if (!linkedProject) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-0 sm:p-6"
-      onClick={onClose}
-    >
+    <div className="motion-safe:animate-backdrop-in fixed inset-0 z-50 bg-black/50" onClick={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative flex h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+        className={`motion-safe:animate-modal-in fixed inset-x-0 mx-auto flex flex-col overflow-hidden bg-white shadow-2xl transition-[top,height,max-width,border-radius] duration-300 ease-out ${
+          expanded
+            ? "top-0 h-screen max-w-[100vw] rounded-none"
+            : "top-[5vh] h-[90vh] max-w-6xl rounded-2xl"
+        }`}
       >
         <div className="flex shrink-0 items-center justify-between border-b border-gray-200 px-4 py-3">
           <button
@@ -2749,17 +2743,22 @@ function LinkedCaseStudyModal({ slug, onClose }) {
           >
             ← Back
           </button>
-          <Link
-            to={`/work/${slug}`}
-            onClick={onClose}
-            aria-label="Open full page"
+          <button
+            type="button"
+            onClick={() => setExpanded((e) => !e)}
+            aria-label={expanded ? "Exit full screen" : "Expand to full screen"}
             className="text-gray-600 hover:text-black"
           >
-            <FullScreenIcon expanded={false} />
-          </Link>
+            <FullScreenIcon expanded={expanded} />
+          </button>
         </div>
-        <div ref={scrollContainerRef} className="flex-1 overflow-y-auto">
-          <CaseStudyContent project={linkedProject} isModal scrollContainerRef={scrollContainerRef} />
+        <div ref={scrollContainerRef} className="scrollbar-hidden flex-1 overflow-y-auto">
+          <CaseStudyContent
+            project={linkedProject}
+            isModal
+            scrollContainerRef={scrollContainerRef}
+            isExpanded={expanded}
+          />
         </div>
       </div>
     </div>

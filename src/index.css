@@ -1,14 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-heading: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  --font-serif: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
+  --font-serif: "Noto Serif", ui-serif, Georgia, "Times New Roman", serif;
 
   --animate-caret: caret-blink 1s step-end infinite;
   --animate-rise-up: rise-up 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  --animate-rise: rise-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  --animate-bloom: flower-bloom 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-drop-in: drop-in 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-tab-in-right: tab-slide-in-right 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-tab-in-left: tab-slide-in-left 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-letter-rise: letter-rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-modal-in: modal-in 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-backdrop-in: backdrop-in 0.3s ease-out both;
 
   @keyframes rise-up {
     from {
@@ -21,10 +25,13 @@
     }
   }
 
-  @keyframes rise-in {
+  /* Drops down into place (as opposed to rise-up's upward motion) — paired
+     with staggered delays top to bottom, so the sidebar reveal reads as a
+     downward cascade. */
+  @keyframes drop-in {
     from {
       opacity: 0;
-      transform: translateY(14px);
+      transform: translateY(-16px);
     }
     to {
       opacity: 1;
@@ -32,11 +39,26 @@
     }
   }
 
-  @keyframes flower-bloom {
+  /* Played on the incoming tab's content when switching between Works,
+     Garden and About — a short fade-and-shift in the direction of travel. */
+  @keyframes tab-slide-in-right {
     from {
-      transform: scale(0.94);
+      opacity: 0;
+      transform: translateX(28px);
     }
     to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes tab-slide-in-left {
+    from {
+      opacity: 0;
+      transform: translateX(-28px);
+    }
+    to {
+      opacity: 1;
       transform: none;
     }
   }
@@ -44,6 +66,41 @@
   @keyframes caret-blink {
     50% {
       opacity: 0;
+    }
+  }
+
+  /* Played on each letter of a word on load, staggered via animation-delay —
+     a soft rise-and-fade reveal, letter by letter. */
+  @keyframes letter-rise {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* The linked-case-study modal growing into place from slightly smaller and
+     faded out, rather than popping in at full size instantly. */
+  @keyframes modal-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes backdrop-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
     }
   }
 }
@@ -58,10 +115,55 @@
     color: #111111;
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    cursor:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18'%3E%3Ccircle cx='9' cy='9' r='8' fill='%23111111'/%3E%3C/svg%3E")
+        9 9,
+      auto;
   }
 
   ::selection {
     background: #111111;
     color: #ffffff;
+  }
+
+  /* Links and buttons default to the browser's own pointer cursor (a UA
+     stylesheet rule on the element itself, which inheritance from `body`
+     can't override) — reset them back to inheriting the dot everywhere. */
+  a,
+  button,
+  [role="button"] {
+    cursor: inherit;
+  }
+}
+
+/* Keeps an element scrollable while hiding its scrollbar, for places (like
+   the linked-case-study modal) where a visible scrollbar would clutter a
+   tight, chrome-heavy layout. */
+.scrollbar-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+/* The SparkleTrail component's spawned glyphs — set via inline style rather
+   than a Tailwind utility (each spawn needs a one-off duration/delay), so
+   this keyframe is declared as plain CSS instead of an `--animate-*` theme
+   token. Combines the translate-to-center with the scale/rotate so it isn't
+   clobbered by the element's own positioning transform. */
+@keyframes sparkle-trail {
+  0% {
+    transform: translate(-50%, -50%) scale(0) rotate(-20deg);
+    opacity: 0;
+  }
+  30% {
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.3) rotate(15deg);
+    opacity: 0;
   }
 }

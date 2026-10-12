@@ -2,7 +2,7 @@
 // Keep the same field shape (add/remove items from arrays freely) and both
 // the homepage and case study template will pick up your content automatically.
 
-import finalMockup from "../assets/earthquake-prep-kit/final_mockup.webp";
+import earthquakePrepKitHero from "../assets/earthquake-prep-kit/earthquake-prep-kit-hero.webp";
 import techMuseum from "../assets/earthquake-prep-kit/The_Tech_Museum.jpg";
 import techInteractiveLogo from "../assets/earthquake-exhibit/tech-interactive-logo.webp";
 import onTheFloorObservation from "../assets/earthquake-prep-kit/on_the_floor_observation.jpg";
@@ -173,7 +173,7 @@ function placeholderProject(n) {
 
 const earthquakeDiyPrepKitGame = {
   slug: "project-2",
-  title: "Earthquake DIY Prep Kit Game",
+  title: "DIY Prep Kit Game",
   challengeOrange: true,
   tagline: "Educating Bay Areans about earthquake preparation through an interactive tabletop game",
   tags: [],
@@ -192,7 +192,7 @@ const earthquakeDiyPrepKitGame = {
   },
   cover:
     "My co-designer, Isabel, and I were tasked with designing a tabletop interactive game for the Earthquake Preparation section of the exhibit.",
-  heroImage: finalMockup,
+  heroImage: earthquakePrepKitHero,
   sectionTitles: {
     problem: "Bay Areans are unprepared for earthquakes",
     research: "Observing visitors on the floor",
@@ -401,8 +401,23 @@ const earthquakeDiyPrepKitGame = {
 const ucscMentorshipPlatform = {
   ...placeholderProject(1),
   title: "UC Santa Cruz Mentorship Program",
+  // Shown on the Works list: a short badge (company + icon), a serif title,
+  // and a punchier one-line headline — all distinct from the fuller `title`/
+  // `tagline` used on the case study page itself.
+  company: "UC Santa Cruz",
+  companyIcon: "\u{1F393}",
+  listTitle: "UCSC Mentorship Platform",
+  listHeadline: "Building a scalable mentorship platform for UXers",
   heroVideo: mentorshipHero,
-  tags: ["Mentorship", "UX/UI"],
+  heroVideoTall: true,
+  // Reserves the full viewport height around the hero (instead of just the
+  // video's own 90vh) so nothing below it peeks into view until scrolled.
+  heroNoPeek: true,
+  // Shows the full video frame uncropped on the Works list cover (instead of
+  // the usual object-cover crop) so less of it is cut off — "zoomed out".
+  listHeroContain: true,
+  tags: ["0 → 1", "Web"],
+  alignTocWithContext: true,
   type: "",
   year: "",
   copywriting: "",
@@ -649,6 +664,7 @@ const earthquakeGeologyMapProjection = {
   ...placeholderProject(3),
   hideFromHome: true,
   hideContext: true,
+  alignTocWithContext: true,
   showBackToTop: true,
   hideUsabilityTesting: true,
   hideIterations: true,
@@ -770,9 +786,9 @@ const earthquakeGeologyMapProjection = {
   meta: {
     ...placeholderProject(3).meta,
     role: "UX Designer",
-    tools: "Claude Design, Claude Code\n\nELO 2402L\n\nNebula projector",
+    tools: "Claude Design, Claude Code, ELO 2402L, Nebula projector",
     timeline: "3 weeks",
-    team: "Ivy T.\n\nKatie O. (Concept)\n\nBeth M. (Art + Visual Concepts)",
+    team: "Ivy T., Katie O. (Concept), Beth M. (Art + Visual Concepts)",
   },
   problem: {
     significance:
@@ -820,29 +836,31 @@ const earthquakeGeologyMapProjection = {
 const earthquakeExhibit = {
   ...placeholderProject(4),
   title: "The Tech Interactive Earthquake Exhibit",
+  company: "The Tech Interactive",
+  companyIcon: "\u{1F3DB}\u{FE0F}",
+  listTitle: "The Tech Interactive Earthquake Exhibit",
+  listHeadline: "Educating museum visitors about Bay Area earthquakes",
   tagline: "Educating museum visitors about earthquake geology and preparation through an interactive exhibit experience",
-  tags: ["Museum", "UX/UI", "Fabrication"],
+  tags: ["Internship", "Fabrication", "Usability Testing"],
   heroImage: techInteractiveLogo,
   heroImageCompact: true,
+  heroImageFull: true,
+  heroNoPeek: true,
   type: "",
   year: "",
   tldrImage: techMuseum,
   cover:
-    "[The Tech Interactive Museum](https://www.thetech.org/), a science and technology center in the heart of the Silicon Valley, is relaunching its popular Earthquake Exhibit in Summer 2027.\n\nI designed 2 digital experiences that would be part of the exhibit.",
+    "[The Tech Interactive Museum](https://www.thetech.org/), a science and technology center in the heart of the Silicon Valley, is relaunching its popular Earthquake Exhibit in Summer 2027.\n\nI designed 2 digital experiences that would be part of the exhibit.\n\nProjected to reach **~250,000** to **400,000** visitors in the next year.",
   meta: {
     ...placeholderProject(4).meta,
     role: "UX Designer",
-    tools: "Figma, Miro, Visual Studios, Claude Design, Claude Code\n\nRFID, 3D printing",
+    tools: "Figma, Miro, Visual Studios, Claude Design, Claude Code, RFID, 3D printing",
     timeline: "June - Sept 2026 (8 weeks)",
-    team: "Ivy T. (Digital Design)\n\nIsabel M. (Hardware Design)\n\nKatie O. (Manager)\n\nBeth M. (Art + Concept Design)",
-  },
-  impact: {
-    prefix: "Projected to reach",
-    low: 250000,
-    high: 400000,
-    suffix: "visitors in the next year.",
+    team: "Ivy T. (Digital Design), Isabel M. (Hardware Design), Katie O. (Manager), Beth M. (Art + Concept Design)",
   },
   linkedCaseStudies: ["project-3", "project-2"],
+  hideToc: true,
+  hideOverview: true,
   hideContext: true,
   solution: "",
   hideResearch: true,
@@ -856,10 +874,18 @@ const earthquakeExhibit = {
 
 const zoomHybridInstruction = {
   ...placeholderProject(5),
-  title: "Zoom Capstone",
+  title: "ZoomMate in the Classroom",
+  company: "Zoom",
+  companyIcon: "\u{1F4AC}",
+  listTitle: "ZoomMate in the Classroom",
+  // Breaks out of the two-column Works list to span the full width.
+  listFullWidth: true,
+  listHeadline: "Exploring conversational AI in hybrid instruction",
   tagline: "Improving hybrid synchronous instruction in higher education",
   heroVideo: zoomHero,
-  tags: ["Capstone", "Conversational AI", "Research", "UX/UI"],
+  heroVideoTall: true,
+  tags: ["Capstone", "Conversational AI", "Research"],
+  hideToc: true,
   meta: {
     ...placeholderProject(5).meta,
     role: "Product Designer\n\nProject Manager",
@@ -896,7 +922,7 @@ const zoomHybridInstruction = {
 export const projects = [
   ucscMentorshipPlatform,
   earthquakeExhibit,
+  zoomHybridInstruction,
   earthquakeDiyPrepKitGame,
   earthquakeGeologyMapProjection,
-  zoomHybridInstruction,
 ];
