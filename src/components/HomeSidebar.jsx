@@ -110,7 +110,7 @@ export default function HomeSidebar({ className = "" }) {
           </p>
         ) : (
           <div
-            className="motion-safe:animate-drop-in font-sans text-sm leading-relaxed text-gray-700"
+            className="motion-safe:animate-drop-in font-sans text-base leading-relaxed text-gray-700"
             style={{ animationDelay: "400ms" }}
           >
             <p className="lowercase">{profile.role}</p>
