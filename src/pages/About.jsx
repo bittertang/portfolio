@@ -9,7 +9,9 @@ export default function About() {
     <div className="px-4 pb-10 pt-4 lg:pb-16 lg:pt-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:gap-20">
         <div className="flex flex-col gap-4 sm:w-80">
-          <img src={headshot} alt="Ivy" className="aspect-square w-full object-cover" />
+          <div className="-rotate-2 bg-white p-3 pb-10 shadow-xl">
+            <img src={headshot} alt="Ivy" className="aspect-square w-full object-cover" />
+          </div>
         </div>
         <div className="flex flex-1 flex-col gap-4 text-sm leading-relaxed text-gray-700">
           <Typewriter
