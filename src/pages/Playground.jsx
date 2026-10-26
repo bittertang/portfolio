@@ -6,8 +6,8 @@ import corporateWorkPolice from "../assets/garden/corporate-work-police.mp4";
 
 const MIN_SCALE = 0.25;
 const MAX_SCALE = 3;
-// The canvas opens (and resets) zoomed out a little so more of it is in view.
-const START_SCALE = 0.7;
+// The canvas opens (and resets) at 100% zoom.
+const START_SCALE = 1;
 const GRID = 32;
 
 // Everything lives in "world" coordinates, with (0, 0) at the middle of the
