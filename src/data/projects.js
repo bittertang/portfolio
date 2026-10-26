@@ -442,7 +442,7 @@ const ucscMentorshipPlatform = {
     role: "UX Designer",
     tools: "Figma, Miro, Visual Studios, Claude Code",
     team: "Ivy T. (me), Tereese B., Nicole F., Diane P.",
-    timeline: "July - Sept 2026",
+    timeline: "July 2026 - Now",
   },
   sectionTitles: {
     ...placeholderProject(1).sectionTitles,
