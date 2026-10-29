@@ -22,28 +22,25 @@ import instructionGifs from "../assets/earthquake-prep-kit/instruction-gifs.mp4"
 import finalGame1 from "../assets/earthquake-prep-kit/final-game-1.mp4";
 import finalGame2 from "../assets/earthquake-prep-kit/final-game-2.mp4";
 import finalGame3 from "../assets/earthquake-prep-kit/final-game-3.mp4";
-import mentorshipAffinityBefore from "../assets/mentorship-platform/affinity-diagram-before.webp";
-import mentorshipAffinityAfter from "../assets/mentorship-platform/affinity-diagram-after.webp";
-import explorationsOverview from "../assets/mentorship-platform/explorations-overview.webp";
-import exploration1Annotations from "../assets/mentorship-platform/exploration1-annotations.webp";
-import exploration2Annotations from "../assets/mentorship-platform/exploration2-annotations.webp";
-import exploration3Annotations from "../assets/mentorship-platform/exploration3-annotations.webp";
-import exploration4Annotations from "../assets/mentorship-platform/exploration4-annotations.webp";
-import claudedesign from "../assets/mentorship-platform/claudedesign.webp";
-import dashboardLofi from "../assets/mentorship-platform/dashboard-lofi.webp";
-import aiAgendaLowfi from "../assets/mentorship-platform/ai-agenda-lowfi.mp4";
-import mentorSearch from "../assets/mentorship-platform/mentor-search.webp";
-import mentorProfile from "../assets/mentorship-platform/mentor-profile.webp";
 import mentorshipHero from "../assets/mentorship-platform/mentorship-hero.mp4";
-import mvpMentorReveal from "../assets/mentorship-platform/mvp-mentor-reveal.webp";
-import mvpMentorProfile from "../assets/mentorship-platform/mvp-mentor-profile.webp";
-import mvpMentorDirectory from "../assets/mentorship-platform/mvp-mentor-directory.webp";
-import nudge from "../assets/mentorship-platform/nudge.webp";
-import onboardingPreview from "../assets/mentorship-platform/onboarding-preview.webp";
-import dashboardPreview from "../assets/mentorship-platform/dashboard-preview.webp";
-import mentorshipResearch from "../assets/mentorship-platform/research.webp";
-import designSystemImage from "../assets/mentorship-platform/design-system.webp";
-import designSystemAi from "../assets/mentorship-platform/design-system-ai.webp";
+import mentorshipResearch from "../assets/mentorship-platform/v2/research.webp";
+import mentorshipAffinityBefore from "../assets/mentorship-platform/v2/affinity-diagram-before.webp";
+import mentorshipAffinityAfter from "../assets/mentorship-platform/v2/affinity-diagram-after.webp";
+import currentProcess from "../assets/mentorship-platform/v2/current-process.webp";
+import solutionOnboarding from "../assets/mentorship-platform/v2/solution-onboarding.webp";
+import solutionMatching from "../assets/mentorship-platform/v2/solution-matching.webp";
+import solutionMentorDirectory from "../assets/mentorship-platform/v2/solution-mentor-directory.webp";
+import mentorProfile from "../assets/mentorship-platform/v2/mentor-profile.webp";
+import entryPoints from "../assets/mentorship-platform/v2/entry-points.webp";
+import quickStats from "../assets/mentorship-platform/v2/quick-stats.webp";
+import updatedFlow from "../assets/mentorship-platform/v2/updated-flow.webp";
+import roundsOverview from "../assets/mentorship-platform/v2/rounds-overview.webp";
+import matchResults from "../assets/mentorship-platform/v2/match-results.webp";
+import runningMatches1 from "../assets/mentorship-platform/v2/running-matches-1.webp";
+import runningMatches2 from "../assets/mentorship-platform/v2/running-matches-2.webp";
+import editMatch from "../assets/mentorship-platform/v2/edit-match.webp";
+import ideationSketches from "../assets/mentorship-platform/v2/ideation-sketches.webp";
+import cuttingDown from "../assets/mentorship-platform/v2/cutting-down.webp";
 import panelExplorations from "../assets/geology-map/panel-explorations.webp";
 import geologyMapHero from "../assets/geology-map/hero.mp4";
 import finalProjection from "../assets/geology-map/final_projection.mp4";
@@ -420,23 +417,15 @@ const ucscMentorshipPlatform = {
   alignTocWithContext: true,
   type: "",
   year: "",
-  copywriting: "",
-  hideUsabilityTesting: true,
-  hideIterations: true,
-  hideFinalFlow: true,
-  challengeDark: true,
-  iterations: {
-    ...placeholderProject(1).iterations,
-    round2Testing: null,
-  },
-  failedConcepts: {
-    ...placeholderProject(1).failedConcepts,
-    concepts: [],
-  },
   tagline:
     "Facilitating the growth of mentor-mentee relationships in UC Santa Cruz's HCI graduate program",
   cover:
-    "UC Santa Cruz's Human-Computer Interaction program boasts a tight knit network of mentors in the field of HCI. Our team was tasked to design a centralized hub for students and mentees in the program to get matched and manage their mentor-mentee relationship.",
+    "UC Santa Cruz's Human-Computer Interaction program boasts a tight knit network of mentors in the field of Human-Computer Interaction. Our team was tasked with **creating a new platform that automated the matching process for admin and facilitated sustainable relationships for mentors and mentees**.",
+  impactStats: [
+    "Cut labor of matching process for Admin by 30%",
+    "Spearheaded Dashboard and Admin design workflow",
+    "~90% of mentees and mentors preferred this platform over the program's current format",
+  ],
   meta: {
     ...placeholderProject(1).meta,
     role: "UX Designer",
@@ -444,220 +433,248 @@ const ucscMentorshipPlatform = {
     team: "Ivy T. (me), Tereese B., Nicole F., Diane P.",
     timeline: "July 2026 - Now",
   },
-  sectionTitles: {
-    ...placeholderProject(1).sectionTitles,
-    problem: "The task: a central hub for admin, mentors, and mentees",
-    solution: "Reimagining the Mentorship Coalition Program in a new format",
-    research: "Relationships often fizzle out by the end of the academic year.",
-    prototyping: "Exploring initial Dashboard layouts",
-    designSystem: "Building with UCSC's current brand identity as a baseline",
-    finalFlow: "Key flows",
-    outcome: "What I Learned",
-  },
-  prototypingLabel: "Design Process",
-  prototypingHeroImage: claudedesign,
-  prototypingExtraImage: dashboardLofi,
-  prototypingHeroText:
-    "After creating the home base of the experience, we then shifted our focus to mentor-mentee communication and connections.",
-  finalFlowLabel: "The Final Product",
-  finalFlow: "",
-  outcomeLabel: "Reflection",
-  outcome: "",
-  outcomeCards: [
+  // Replaces every template section below the overview; each section's
+  // `blocks` render in order, and nav-linkable subheadings show in the sidebar.
+  sections: [
     {
-      label: "Designing for flexibility",
-      description:
-        "No mentee-mentor relationship looks the same. Everyone has varying preferences when it comes to communication, expectations, and goals, so it was important to approach solutions that could accommodate for different types of relationships.",
+      id: "background",
+      label: "Background",
+      title: "The task: a central hub for admin, mentors, and mentees",
+      blocks: [
+        { type: "subheading", label: "Background", nav: false },
+        {
+          type: "text",
+          text: "The UCSC HCI Mentorship program's goal is to help students create meaningful relationships with industry mentors.\n\nCurrently, there are gaps in the way the program's run. The administrative side is conducted manually, matching isn't perfect, and relationships don't last.",
+        },
+        {
+          type: "audience",
+          id: "audience",
+          navLabel: "Audience",
+          groups: [
+            { label: "Program Coordinators", description: "Program Coordinators" },
+            { label: "Mentors", description: "Mentors" },
+            { label: "Student Mentees", description: "Student Mentees" },
+          ],
+        },
+        {
+          type: "challenge",
+          id: "challenge",
+          navLabel: "The challenge",
+          text: "How might we design a platform that…\n1) streamlines the administrative side of matching to create optimal pairings\n2) helps cultivate sustainable professional relationships in the program?",
+        },
+      ],
     },
     {
-      label: "Incorporating AI in the Design Process",
-      description:
-        "Coming into the project, there were an overwhelming amount of tools and possible ways of using AI with Claude Code, Claude Design, Figma MCP… the list goes on. It took some experimenting to figure out which tools fit into which parts of the design process, without sacrificing creativity and quality.",
+      id: "solution",
+      label: "Solution",
+      title: "Reimagining the Mentorship Coalition Program in a new format",
+      blocks: [
+        {
+          type: "cards",
+          items: [
+            {
+              label: "Onboarding",
+              description: "Mentees and mentors fill out information about their background and interests.",
+              src: solutionOnboarding,
+            },
+            {
+              label: "Conduct Matching",
+              description:
+                "The Program Coordinator runs the matching algorithm, creating pairs and pods based on onboarding data.",
+              src: solutionMatching,
+            },
+            {
+              label: "Mentor Directory",
+              description: "Post-match, mentees still have the opportunity to connect with other mentors.",
+              src: solutionMentorDirectory,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "research",
+      label: "Research",
+      title: "The current format has a high cost: administrative burden.",
+      blocks: [
+        { type: "image", src: mentorshipResearch, alt: "Research methods overview" },
+        {
+          type: "text",
+          text: "To understand current experiences in the Mentor Coalition program, we sent out a short **survey** and conducted **30-45 minute semi-structured interviews** with 4 mentors and 10 mentees that have participated in the program in the past year.",
+        },
+        {
+          type: "insight",
+          header: "Mentee-mentor connections often fade off by the end of the year.",
+        },
+        {
+          type: "collapsible",
+          label: "How we got here",
+          text: "On FigJam, we employed affinity diagramming to synthesize insights from both research methods, leading to us extracting the following themes: program-specific issues, potential platform features, challenges with mentorship relationships, values and motivations, and structure/style preferences.",
+          tabs: [
+            { label: "Before", src: mentorshipAffinityBefore, alt: "Affinity diagram (before)" },
+            { label: "After", src: mentorshipAffinityAfter, alt: "Affinity diagram (after)" },
+          ],
+        },
+        {
+          type: "text",
+          text: "Relationships didn't last mostly because they weren't compatible from the start. Mentors and mentees pointed to misalignment in personalities, interests, and career goals.\n\nOne mentee interested in pursuing a PhD noted:",
+        },
+        {
+          type: "quote",
+          text: "Even though my mentor did have a research background, I felt like she couldn't tell me much about the PhD route… so I ended up seeking out another mentor [outside of the program].",
+        },
+        {
+          type: "text",
+          text: "This led us to prioritize improving the matching process over improving existing relationships.",
+        },
+        { type: "subheading", label: "How does the matching currently work?" },
+        {
+          type: "text",
+          text: "To learn more about the current process behind the scenes, we spoke to 1 Program Coordinator. The key insight that surfaced was:",
+        },
+        {
+          type: "insight",
+          label: "Key Insight",
+          header: "The matching process costs time and administrative burden.",
+        },
+        {
+          type: "text",
+          text: "They singlehandedly organize the admin side manually, from collecting individual data to creating the pairings. This amount of work on one person means there's a lot of room for human error, so matches aren't the most optimal.",
+        },
+        { type: "image", src: currentProcess, alt: "Current matching process", narrow: true },
+      ],
+    },
+    {
+      id: "building-the-mvp",
+      label: "Building the MVP",
+      title: "Prioritizing the Matching Process",
+      blocks: [
+        { type: "text", text: "The team focused on the following 2 flows to include in the MVP:" },
+        {
+          type: "cards",
+          items: [
+            {
+              label: "Onboarding",
+              description:
+                "Mentees and mentors complete an onboarding form, filling out background information and pairing preferences.",
+            },
+            {
+              label: "Matching Management",
+              description:
+                "The coordinator initiates the matching algorithm, creating pairings based on the form, reviews the results, and publishes.",
+            },
+          ],
+        },
+        {
+          type: "text",
+          text: "While half of the team focused on Onboarding for mentors and mentees, I led the end-to-end design of the Matching Management experience for program coordinator users.",
+        },
+        { type: "subheading", label: "Exploring design directions" },
+        {
+          type: "text",
+          text: "My team and I proceeded to explore different design avenues through sketching and vibecoding before converging on a low-fidelity design.\n\nSimilar ways of displaying data emerged among our drawings, but our ideas diverged in the flow for navigating matching. Our entry points conflicted; one flow began with the Participant Roster, while other started with Rounds.",
+        },
+        {
+          type: "images",
+          items: [
+            { src: entryPoints, alt: "Conflicting entry points" },
+            { src: quickStats, alt: "Quick stats sketches" },
+          ],
+        },
+        {
+          type: "text",
+          text: "After discussing with the Program Coordinator, we ended up aligning on a flow where Matching was nested in Rounds. This took into account the case where the Coordinator wasn't satisfied with the algorithm's results and decided to run it again.",
+        },
+        { type: "image", src: updatedFlow, alt: "Updated user flow", spaceAfter: true },
+        { type: "subheading", label: "Designing with FigmaMCP" },
+        {
+          type: "text",
+          text: "Using FigmaMCP, we fed the flow and our sketches into Claude to build out our designs on Figma.",
+        },
+        {
+          type: "panel",
+          label: "Rounds Overview",
+          description: "Admin creates a new round to start the matching process.",
+          src: roundsOverview,
+        },
+        {
+          type: "panel",
+          label: "Match Results",
+          description: "Matches are generated with the algorithm.",
+          src: matchResults,
+          extra: {
+            label: "Iteration",
+            images: [
+              { src: runningMatches1, alt: "Running matches progress screen 1" },
+              { src: runningMatches2, alt: "Running matches progress screen 2" },
+            ],
+            text: "To add more transparency surrounding the algorithm and reassurance to users, I added progress screens before the reveal of the match results. This communicated system status while keeping the Coordinator in the loop on what the algorithm was doing with the data.",
+          },
+        },
+        {
+          type: "panel",
+          label: "Edit Match",
+          description: "Admin verifies all matches and makes edits accordingly.",
+          src: editMatch,
+        },
+      ],
+    },
+    {
+      id: "in-app-experience",
+      label: "In-app Experience",
+      title: "Platform MVP: Mentor Directory and Profile",
+      blocks: [
+        {
+          type: "text",
+          text: "Now that we built the foundation of the platform, matching, we moved on to address how to sustain these relationships. We ideated different features to support meeting preparation and communication, things that contributed to lasting relationships.",
+        },
+        {
+          type: "insight",
+          header: "6 out of 10 mentees were no longer in contact with their originally matched mentor.",
+        },
+        { type: "image", src: ideationSketches, alt: "Feature ideation sketches" },
+        { type: "subheading", label: "Cutting down from 5 to 2 Features" },
+        { type: "image", src: cuttingDown, alt: "Cutting down from 5 to 2 features", narrow: true },
+        {
+          type: "text",
+          text: "I decided to strip the experience down to **Mentor Directory** and **Profile** for the MVP, which would use data already collected from Onboarding.\n\nThese features didn't necessarily address supporting an existing connection, but did tackle the issue of the matches being incompatible. In the case where matches generated by the algorithm don't work out, this would give mentees additional chances to find other connections.",
+        },
+        {
+          type: "cards",
+          items: [
+            { label: "Mentor Directory", description: "Search for other mentors.", src: solutionMentorDirectory },
+            {
+              label: "Mentor Profiles",
+              description: "Learn more about a mentor and their background.",
+              src: mentorProfile,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "reflection",
+      label: "Reflection",
+      title: "What I learned",
+      blocks: [
+        {
+          type: "cards",
+          items: [
+            {
+              label: "Designing for flexibility",
+              description:
+                "No mentee-mentor relationship looks the same. Everyone has varying preferences when it comes to communication, expectations, and goals, so it was important to approach solutions that could accommodate different types of relationships.",
+            },
+            {
+              label: "Incorporating AI in the Design Process",
+              description:
+                "Coming into the project, there were an overwhelming amount of tools and possible ways of using AI with Claude Code, Claude Design, Figma MCP… the list goes on. It took some experimenting to figure out which tools fit into which parts of the design process, without sacrificing creativity and quality.",
+            },
+          ],
+        },
+      ],
     },
   ],
-  designSystem:
-    "Using UC Santa Cruz's existing [brand guide](https://communications.ucsc.edu/brand-overview/) as the foundation for our project's visual identity, we fleshed out the rest of our design system on Figma.",
-  aiDesignDecisions:
-    "When designing components that presented AI-generated information, we wanted to be intentional with how to visually present this in efforts to be transparent and trustworthy with users.",
-  aiDesignDecisionsImage: designSystemAi,
-  solution:
-    "I spearheaded the design for the Dashboard and in-app experience alongside Diane, while my teammates worked on the Onboarding flow.",
-  solutionFeatures: [
-    {
-      label: "Onboarding",
-      description: "Fill out your background, experiences, and preferences to get matched.",
-      src: onboardingPreview,
-    },
-    {
-      label: "Dashboard",
-      description:
-        "Stay connected to your mentee-mentor relationships throughout the academic school year.",
-      src: dashboardPreview,
-      bg: "#fff8e2",
-      device: "browser",
-    },
-  ],
-  prototyping:
-    "My teammate, Diane, and I had initially sketched out frames of the core features we had identified (Dashboard, Upcoming Meetings, Past Meetings, Mentor Search, Profile Page) before involving AI in our design process. We then roped in Claude Design to explore different layout options of the Dashboard as a starting point. Our goal was to get exposed to different ideas as quickly as possible to narrow down on.",
-  prototypingTabs: [
-    {
-      label: "Dashboard explorations",
-      sideCards: [
-        { label: "Overview", src: explorationsOverview },
-        { label: "Priority Feed", src: exploration1Annotations },
-        { label: "Relationship Hub", src: exploration2Annotations },
-        { label: "Calendar-first", src: exploration4Annotations },
-        { label: "Meetings-focused", src: exploration3Annotations },
-      ],
-      text: "Given these layout options, we proceeded to identify elements of each that we wanted to integrate into our own dashboard design. We were able to visualize ideas that were reflected in our sketches and others that we hadn't considered, such as a relationship-centered dashboard and a calendar-first workspace.\n\nWhile we didn't end up going in these directions, these ideas helped later inform our designs for other pages.",
-    },
-  ],
-  prototypingExtraPlaceholder: true,
-  translatingResearchTitle: "Lowering the barriers to driving the relationship",
-  translatingResearch:
-    "Mentees often noted getting caught up in school and other priorities as hurdles to keeping in contact with their mentors. Coupled with the responsibility of taking the lead, the act of reaching out and setting up meetings can feel taxing, so we looked for ways to streamline meeting preparation and communication-related tasks.",
-  expandingMentorship:
-    "On the surface, mentorship in our program appears to be limited to just who you're assigned to. In the case where matches don't work out, we wanted to give more chances for mentees to find connections.",
-  mvpSection: {
-    label: "Shipping the MVP",
-    title: "We prioritized core pages for the MVP based on matching data.",
-    text: "With the school year now approaching at this point in our project, we decided to take a step back and focus on building the MVP first.\n\nAs a team, we prioritized the **matching process**. In discussions with engineering regarding feasibility, the Dashboard Team then focused on pages that would have Onboarding data for the in-app experience, leaving other features such as scheduling for the future phases.",
-    items: [
-      {
-        label: "Mentor Reveal",
-        src: mvpMentorReveal,
-        description: "Once admin finalizes matches, mentees and mentors find out who they're paired up with.",
-      },
-      {
-        label: "Profile",
-        src: mvpMentorProfile,
-        description: "Gain a more personable understanding of other mentors and mentees through their profile.",
-      },
-      {
-        label: "Mentor Directory",
-        src: mvpMentorDirectory,
-        description: "Mentees can look for other mentors, with the option of filtering based off work experience and background.",
-      },
-    ],
-  },
-  expandingMentorshipGroups: [
-    {
-      hidePlaceholder: true,
-      insight: {
-        header: "3 out of 4 mentees were no longer in contact with their originally matched mentor.",
-      },
-      cards: [
-        {
-          label: "Problem",
-          description:
-            "When current relationships don't work out, mentees give up altogether or look outside of the program for mentorship. This leaves their mentors unable to actively participate in the program.",
-        },
-        { label: "Solution", description: "Mentor Search", image: mentorSearch, imageBelow: true },
-        { label: "Solution", description: "Mentor Profiles", image: mentorProfile, imageBelow: true },
-      ],
-    },
-  ],
-  translatingResearchGroups: [
-    {
-      title: "Simplifying Meeting Preparation",
-      hidePlaceholder: true,
-      quote:
-        "Driving the relationship means I have **one more thing to think about and prepare for**, which at times [felt like] a liability.",
-      insight: {
-        header: "4 of 8 mentees reported not knowing what to talk about during meetings.",
-      },
-      cards: [
-        {
-          label: "Problem",
-          description:
-            "Mentees are expected to take the lead in meetings and drive the conversation, which can make planning for meetings overwhelming.",
-        },
-        {
-          label: "Solution",
-          description: "AI-generated agenda recommendations",
-          video: aiAgendaLowfi,
-        },
-      ],
-    },
-    {
-      title: "Setting periodic reminders to check in",
-      hidePlaceholder: true,
-      quote:
-        "With the workload, it becomes **difficult to manage appointments,** and make sure I meet my mentor consistently.",
-      cards: [
-        {
-          label: "Problem",
-          description:
-            "When no one reaches out, the relationship eventually falls off.\n\nMentors are often left in the dark when mentees don't communicate, and the same applies to mentees when mentors get caught up in their own busy schedules.",
-        },
-        { label: "Solution", description: "Nudge and check in message", image: nudge, imageBelow: true },
-      ],
-    },
-  ],
-  problem: {
-    ...placeholderProject(1).problem,
-    significanceLabel: "Background",
-    significance:
-      "Currently, the Mentorship program is organized completely manually by UCSC's MS HCI program administrator, from conducting the matching process to check ins with participants throughout the academic year. Meanwhile, mentors and student mentees are navigating their relationships independently on various platforms.",
-    theAsk:
-      "The program requested that we build a unified platform to help manage this oversight over the program for admin, and a central hub for mentors and mentees to connect.",
-    audience: {
-      groups: [
-        { label: "Primary", description: "UCSC HCI Master's students" },
-        {
-          label: "Secondary",
-          description: "Mentors that are experienced HCI or UX professionals in industry",
-        },
-        { label: "Program admin", description: "Program admin" },
-      ],
-    },
-    approach: "",
-    challenge:
-      "How might we design a platform that 1) optimizes a mentor-mentee match 2) helps cultivate sustainable relationships for mentees and mentors in the UCSC HCI Mentor Coalition?",
-  },
-  research: {
-    ...placeholderProject(1).research,
-    heroImage: mentorshipResearch,
-    heroImageGrey: true,
-    intro:
-      "To understand current experiences in the Mentor Coalition program, we sent out a short **survey** that received 6 mentee responses and conducted **30-45 minute semi-structured interviews** over Zoom with 4 mentors and 4 mentees that have participated in the program in the past year.\n\nInterviews were recorded and sent to [otter.ai](https://otter.ai/) for transcription, which were then used for data analysis. After synthesizing the research, 2 key findings emerged:",
-    mappingTheFlow: "",
-    findings: [],
-    designRequirements: {
-      ...placeholderProject(1).research.designRequirements,
-      title: "",
-      insightStyle: true,
-      intro:
-        "On FigJam, we proceeded to employ affinity diagramming to synthesize insights from both research methods, leading to us extracting the following themes: program-specific issues, potential platform features, challenges with mentorship relationships, values and motivations, and structure/style preferences.",
-      items: [
-        {
-          label: "Mentee-mentor connections often fade off.",
-          description:
-            "It's difficult to sustain relationships long-term. Mentees cited personality mismatches and their busy schedules as the two top reasons for their relationships not working out.",
-        },
-        {
-          label: "The weight of the responsibility falls on the mentee.",
-          description:
-            "From initiating contact to leading meetings with mentors, mentees are expected to drive the relationship. This pressure can raise the barrier to reaching out.",
-        },
-      ],
-      tabs: [
-        {
-          label: "After",
-          src: mentorshipAffinityAfter,
-          caption: "bucketing interview and survey insights into themes",
-        },
-        {
-          label: "Before",
-          src: mentorshipAffinityBefore,
-          caption: "blue - mentor, yellow - mentee",
-        },
-      ],
-    },
-  },
-  media: {
-    designSystem: [{ type: "image", label: "Design system", src: designSystemImage }],
-  },
 };
 
 const earthquakeGeologyMapProjection = {

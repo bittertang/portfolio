@@ -483,7 +483,7 @@ function ConceptCard({ concept }) {
 // Expandable, fully clickable card for a user-testing finding — header stays
 // visible, the text/quote/image hide until toggled.
 // Expandable "Insight" callout — header stays visible, text hides until toggled.
-function InsightBox({ insight }) {
+function InsightBox({ insight, label = "User Insight" }) {
   const [expanded, setExpanded] = useState(false);
   const toggle = () => insight.text && setExpanded((e) => !e);
 
@@ -506,7 +506,7 @@ function InsightBox({ insight }) {
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 text-center">
           <p className="font-heading mb-1 text-xs uppercase tracking-widest text-gray-500">
-            User Insight
+            {label}
           </p>
           <p className="text-sm text-gray-900">{insight.header}</p>
         </div>
@@ -1387,6 +1387,190 @@ function MediaGrid({ items, onImageClick, aspect = "aspect-video", grey = false 
 // Used both by the routed CaseStudy page and by LinkedCaseStudyModal, which
 // renders a child project's full case study inside an overlay without
 // changing the URL.
+function ContentImage({ image, grey = false }) {
+  return (
+    <figure className="min-w-0">
+      <div className={grey ? "rounded-lg bg-gray-100 p-4 sm:p-6" : ""}>
+        <img src={image.src} alt={image.alt} className="block h-auto w-full rounded-lg" />
+      </div>
+      {image.caption && (
+        <figcaption className="mt-2 text-center text-xs text-gray-500">{image.caption}</figcaption>
+      )}
+    </figure>
+  );
+}
+
+// "How we got here"-style expandable aside: hidden detail text plus optional
+// tabbed images, collapsed by default so the main narrative stays short.
+function CollapsibleBlock({ block }) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className="mb-10 mt-4 max-w-5xl rounded-lg border border-gray-200">
+      <button
+        type="button"
+        onClick={() => setExpanded((e) => !e)}
+        aria-expanded={expanded}
+        className="flex w-full items-center justify-between gap-4 p-4 text-left"
+      >
+        <span className="text-sm font-semibold text-gray-900">{block.label}</span>
+        <span
+          aria-hidden="true"
+          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-gray-300 text-gray-500"
+        >
+          <PlusIcon expanded={expanded} />
+        </span>
+      </button>
+      {expanded && (
+        <div className="px-4 pb-4">
+          {block.text && (
+            <p className="text-sm leading-relaxed text-gray-700">{parseRichText(block.text)}</p>
+          )}
+          {block.tabs && (
+            <Tabs
+              tabs={block.tabs.map((tab) => ({
+                label: tab.label,
+                content: (
+                  <div className="flex items-center bg-gray-50 p-4">
+                    <ContentImage image={tab} />
+                  </div>
+                ),
+              }))}
+            />
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Renders a section's freeform `blocks` (used by projects that define
+// `sections` instead of the fixed template fields).
+function ContentBlocks({ blocks }) {
+  return blocks.map((block, i) => {
+    switch (block.type) {
+      case "text":
+        return (
+          <p
+            key={i}
+            className="mt-4 max-w-5xl whitespace-pre-line text-base leading-relaxed text-gray-700 first:mt-0"
+          >
+            {parseRichText(block.text)}
+          </p>
+        );
+      case "subheading":
+        return block.nav === false ? (
+          <p key={i} className="mt-8 text-sm font-semibold text-gray-900 first:mt-0">
+            {block.label}
+          </p>
+        ) : (
+          <h3
+            key={i}
+            id={slugify(block.label)}
+            className="font-serif mt-12 scroll-mt-24 text-2xl font-light first:mt-0"
+          >
+            {block.label}
+          </h3>
+        );
+      case "image":
+        return (
+          <div key={i} className={`mt-6 max-w-5xl ${block.spaceAfter ? "mb-20" : ""}`}>
+            <div className={block.narrow ? "mx-auto sm:w-4/5" : ""}>
+              <ContentImage image={block} grey={block.grey} />
+            </div>
+          </div>
+        );
+      case "images":
+        return (
+          <div key={i} className="mt-6 grid max-w-5xl gap-4 sm:grid-cols-2">
+            {block.items.map((image) => (
+              <ContentImage key={image.alt} image={image} grey={block.grey} />
+            ))}
+          </div>
+        );
+      case "audience":
+        return <AudienceCards key={i} id={block.id} audience={{ groups: block.groups }} />;
+      case "challenge":
+        return (
+          <ChallengeCard key={i} id={block.id} dark>
+            {block.text}
+          </ChallengeCard>
+        );
+      case "insight":
+        return (
+          <div key={i} className="mt-6 max-w-5xl">
+            <InsightBox insight={block} label={block.label} />
+          </div>
+        );
+      case "quote":
+        return (
+          <blockquote key={i} className="mb-10 mt-6 max-w-5xl border-l-2 border-gray-900 pl-6">
+            <p className="font-serif text-xl font-light italic leading-relaxed text-gray-900">
+              “{block.text}”
+            </p>
+            {block.attribution && (
+              <p className="mt-2 text-sm text-gray-500">— {block.attribution}</p>
+            )}
+          </blockquote>
+        );
+      case "collapsible":
+        return <CollapsibleBlock key={i} block={block} />;
+      case "cards":
+        return (
+          <div
+            key={i}
+            className={`mt-6 grid max-w-5xl gap-4 ${
+              block.items.length >= 3 ? "sm:grid-cols-3" : "sm:grid-cols-2"
+            }`}
+          >
+            {block.items.map((card) => (
+              <div key={card.label} className="flex flex-col rounded-lg border border-gray-300 p-4">
+                <p className="text-sm font-semibold text-gray-900">{card.label}</p>
+                {card.description && (
+                  <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                    {parseRichText(card.description)}
+                  </p>
+                )}
+                {card.src && (
+                  <div className="mt-4 flex flex-1 items-center rounded-lg bg-gray-100 p-4">
+                    <img src={card.src} alt={card.label} className="mx-auto block h-auto max-w-full rounded-lg" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        );
+      case "panel":
+        return (
+          <div key={i} className="mt-6 max-w-5xl rounded-lg border border-gray-300 p-4 sm:p-6">
+            <p className="font-serif text-2xl font-light text-gray-900">{block.label}</p>
+            {block.description && (
+              <p className="mt-2 text-sm leading-relaxed text-gray-700">{block.description}</p>
+            )}
+            <div className="mt-4 rounded-lg bg-gray-100 p-4 sm:p-8">
+              <img src={block.src} alt={block.label} className="block h-auto w-full rounded-lg shadow-sm" />
+            </div>
+            {block.extra && (
+              <div className="mt-6">
+                {block.extra.label && (
+                  <p className="mb-3 text-sm font-semibold text-gray-900">{block.extra.label}</p>
+                )}
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {block.extra.images.map((image) => (
+                    <img key={image.alt} src={image.src} alt={image.alt} className="block h-auto w-full rounded-lg border border-gray-200" />
+                  ))}
+                </div>
+                <p className="mt-4 text-sm leading-relaxed text-gray-700">{block.extra.text}</p>
+              </div>
+            )}
+          </div>
+        );
+      default:
+        return null;
+    }
+  });
+}
+
 function CaseStudyContent({ project, isModal = false, scrollContainerRef, isExpanded = false }) {
   const [lightboxImage, setLightboxImage] = useState(null);
   const openLightbox = (image) => setLightboxImage(image);
@@ -1465,12 +1649,31 @@ function CaseStudyContent({ project, isModal = false, scrollContainerRef, isExpa
     ].filter(Boolean),
   };
 
+  // Projects that define freeform `sections` replace every template section
+  // below the overview; their nav subsections come from linkable blocks.
+  const sectionSubsections =
+    project.sections &&
+    Object.fromEntries(
+      project.sections.map((section) => [
+        section.id,
+        section.blocks
+          .map((block) =>
+            block.type === "subheading" && block.nav !== false
+              ? { id: slugify(block.label), label: block.label }
+              : block.id && block.navLabel
+                ? { id: block.id, label: block.navLabel }
+                : null,
+          )
+          .filter(Boolean),
+      ]),
+    );
+
   return (
     <div className="mx-auto grid max-w-[1800px] lg:grid-cols-[360px_1fr]">
       <aside className="border-b border-gray-200 bg-white lg:border-b-0">
         <CaseStudySidebar
           project={project}
-          subsections={subsections}
+          subsections={sectionSubsections || subsections}
           scrollContainerRef={scrollContainerRef}
           hideAllWorkLink={isModal}
         />
@@ -1582,6 +1785,18 @@ function CaseStudyContent({ project, isModal = false, scrollContainerRef, isExpa
             </div>
           )}
           {project.impact && <ImpactCard impact={project.impact} />}
+          {project.impactStats && (
+            <div className="mt-8 max-w-5xl">
+              <p className="text-xs uppercase tracking-widest text-gray-500">Impact</p>
+              <div className="mt-3 grid gap-4 sm:grid-cols-3">
+                {project.impactStats.map((stat) => (
+                  <div key={stat} className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                    <p className="text-sm leading-relaxed text-gray-900">{stat}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           {project.linkedCaseStudies && project.linkedCaseStudies.length > 0 && (
             <div className="mt-8 grid max-w-6xl gap-6 sm:grid-cols-2">
               {project.linkedCaseStudies.map((slug) => {
@@ -1600,6 +1815,19 @@ function CaseStudyContent({ project, isModal = false, scrollContainerRef, isExpa
           )}
         </Block>
 
+        {project.sections ? (
+          project.sections.map((section) => (
+            <Block
+              key={section.id}
+              id={section.id}
+              eyebrow={numbered(section.label)}
+              title={section.title}
+            >
+              <ContentBlocks blocks={section.blocks} />
+            </Block>
+          ))
+        ) : (
+        <>
         {!project.hideContext && (
         <Block
           id="problem"
@@ -2694,6 +2922,8 @@ function CaseStudyContent({ project, isModal = false, scrollContainerRef, isExpa
           )}
           <MediaGrid items={project.media?.outcome} onImageClick={openLightbox} />
         </Block>
+        )}
+        </>
         )}
       </main>
       <Lightbox image={lightboxImage} onClose={() => setLightboxImage(null)} />
