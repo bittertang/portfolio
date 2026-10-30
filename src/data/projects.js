@@ -901,7 +901,7 @@ const zoomHybridInstruction = {
   tagline: "Improving hybrid synchronous instruction in higher education",
   heroVideo: zoomHero,
   heroVideoTall: true,
-  tags: ["Capstone", "Conversational AI", "Research"],
+  tags: ["Capstone", "Conversational AI", "Desktop"],
   hideToc: true,
   meta: {
     ...placeholderProject(5).meta,

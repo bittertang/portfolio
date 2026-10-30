@@ -13,6 +13,7 @@
   --animate-letter-rise: letter-rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   --animate-modal-in: modal-in 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   --animate-backdrop-in: backdrop-in 0.3s ease-out both;
+  --animate-sprout: sprout 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 
   @keyframes rise-up {
     from {
@@ -59,6 +60,18 @@
     }
     to {
       opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* A plant growing up from its base. No `to` opacity, so it settles at the
+     element's own (e.g. opacity-60) instead of full. */
+  @keyframes sprout {
+    from {
+      opacity: 0;
+      transform: scale(0.92) translateY(12px);
+    }
+    to {
       transform: none;
     }
   }

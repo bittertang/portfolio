@@ -3,11 +3,13 @@ import makeMyDay from "../assets/garden/make-my-day.mp4";
 import iParent from "../assets/garden/iparent.webp";
 import tapTapLove from "../assets/garden/taptaplove.webp";
 import corporateWorkPolice from "../assets/garden/corporate-work-police.mp4";
+import gerdLog from "../assets/garden/gerd-log.mp4";
 
 const MIN_SCALE = 0.25;
 const MAX_SCALE = 3;
-// The canvas opens (and resets) at 100% zoom.
-const START_SCALE = 1;
+// The canvas opens (and resets) zoomed to fit every item, with this much
+// breathing room (px) around them, but never zoomed in past 100%.
+const FIT_PADDING = 64;
 const GRID = 32;
 
 // Everything lives in "world" coordinates, with (0, 0) at the middle of the
@@ -47,13 +49,13 @@ const ITEMS = [
   {
     id: "tap-tap-love",
     image: tapTapLove,
-    label: "Tap, Tap, Love. game",
+    label: "Tap, Tap, Love game",
     aspect: "1326 / 970",
-    x: 0,
-    y: 84,
+    x: -400,
+    y: -140,
     w: 240,
     card: {
-      title: "Tap, Tap, Love.",
+      title: "Tap, Tap, Love",
       description:
         "Interactive compatibility game where 2 participants answer a series of this-or-that questions that determine whether they’re soulmates... or not.\n\nWarning: can get awkward.",
       tags: ["3D Printing", "Arduino", "TinkerCAD"],
@@ -72,6 +74,21 @@ const ITEMS = [
       description:
         "A light sensor that detects a corporate worker’s productivity through the light on their work computer... and blasts an alarm when it goes dark.\n\n(Disclaimer: this is not a real product!)",
       tags: ["Sensors", "Arduino"],
+    },
+  },
+  {
+    id: "gerd-log",
+    video: gerdLog,
+    label: "GERD Log app demo",
+    aspect: "9 / 16",
+    x: 0,
+    y: 84,
+    w: 240,
+    card: {
+      title: "GERD Log",
+      description:
+        "A daily food and symptom journal to track triggers and manage gastroesophageal reflux disease (GERD).",
+      tags: ["Health", "App"],
     },
   },
 ];
@@ -163,13 +180,14 @@ const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
 export default function Playground() {
   const containerRef = useRef(null);
+  const worldRef = useRef(null);
   const dragRef = useRef(null);
   const [positions, setPositions] = useState(() =>
     Object.fromEntries(ITEMS.map((item) => [item.id, { x: item.x, y: item.y }])),
   );
   const [dragging, setDragging] = useState(false);
   const [activeId, setActiveId] = useState(null);
-  const [view, setView] = useState({ x: 0, y: 0, scale: START_SCALE });
+  const [view, setView] = useState({ x: 0, y: 0, scale: 1 });
 
   // Zoom keeping the world point under (px, py) fixed on screen.
   const zoomAt = (px, py, factor) => {
@@ -185,15 +203,42 @@ export default function Playground() {
     zoomAt(rect.width / 2, rect.height / 2, factor);
   };
 
-  const resetView = () => {
+  // Frame every item: measure their on-screen boxes, convert back to world
+  // coordinates through the current view, then center and scale to fit.
+  const fitView = (current) => {
     const rect = containerRef.current.getBoundingClientRect();
-    setView({ x: rect.width / 2, y: rect.height / 2, scale: START_SCALE });
+    const origin = worldRef.current.getBoundingClientRect();
+    const boxes = [...worldRef.current.children].map((el) => el.getBoundingClientRect());
+    const left = Math.min(...boxes.map((b) => b.left));
+    const top = Math.min(...boxes.map((b) => b.top));
+    const right = Math.max(...boxes.map((b) => b.right));
+    const bottom = Math.max(...boxes.map((b) => b.bottom));
+    const world = {
+      x: (left - origin.left) / current.scale,
+      y: (top - origin.top) / current.scale,
+      w: (right - left) / current.scale,
+      h: (bottom - top) / current.scale,
+    };
+    const scale = clamp(
+      Math.min(
+        (rect.width - FIT_PADDING * 2) / world.w,
+        (rect.height - FIT_PADDING * 2) / world.h,
+        1,
+      ),
+      MIN_SCALE,
+      MAX_SCALE,
+    );
+    setView({
+      scale,
+      x: rect.width / 2 - (world.x + world.w / 2) * scale,
+      y: rect.height / 2 - (world.y + world.h / 2) * scale,
+    });
   };
 
-  // Start with the world origin in the middle of the canvas.
+  const resetView = () => fitView(view);
+
   useLayoutEffect(() => {
-    const rect = containerRef.current.getBoundingClientRect();
-    setView({ x: rect.width / 2, y: rect.height / 2, scale: START_SCALE });
+    fitView({ x: 0, y: 0, scale: 1 });
   }, []);
 
   // Trackpad scroll pans; pinch (ctrl+wheel) and cmd+scroll zoom at the cursor.
@@ -268,6 +313,7 @@ export default function Playground() {
       }}
     >
       <div
+        ref={worldRef}
         className="absolute left-0 top-0"
         style={{
           transform: `translate(${view.x}px, ${view.y}px) scale(${view.scale})`,

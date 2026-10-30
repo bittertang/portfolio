@@ -3,6 +3,8 @@ import { NavLink, useLocation } from "react-router-dom";
 import { profile } from "../data/profile";
 import starLogo from "../assets/home/star-logo.webp";
 import leaves from "../assets/home/leaves.webp";
+import plant from "../assets/about/plant-1.webp";
+import flowers from "../assets/garden/flowers.webp";
 import LetterReveal from "./LetterReveal";
 import SparkleTrail from "./SparkleTrail";
 
@@ -19,10 +21,14 @@ const TAB_INTROS = {
   "/playground": {
     heading: "garden",
     blurb: "welcome to my digital garden! dabbling in AI, fabrication, and physical design.",
+    image: flowers,
+    imageClass: "left-10 w-80",
   },
   "/about": {
     heading: "about",
     blurb: "a little bit about my background and current side quests.",
+    image: plant,
+    imageClass: "left-10 w-80",
   },
 };
 
@@ -136,6 +142,16 @@ export default function HomeSidebar({ className = "" }) {
         ))}
       </nav>
 
+      {intro?.image && (
+        <img
+          key={intro.image}
+          src={intro.image}
+          alt=""
+          className={`motion-safe:animate-sprout pointer-events-none absolute bottom-0 z-0 origin-bottom opacity-60 ${intro.imageClass}`}
+          style={{ animationDelay: "500ms" }}
+        />
+      )}
+
       {!intro && (
         <>
           {/* Sits above the aside's white background but below the
@@ -144,7 +160,8 @@ export default function HomeSidebar({ className = "" }) {
           <img
             src={leaves}
             alt=""
-            className="pointer-events-none absolute bottom-0 left-24 z-0 w-64 opacity-60"
+            className="motion-safe:animate-sprout pointer-events-none absolute bottom-0 left-24 z-0 w-64 origin-bottom opacity-60"
+            style={{ animationDelay: "500ms" }}
           />
 
           <div
