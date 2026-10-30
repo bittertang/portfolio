@@ -569,7 +569,7 @@ const ucscMentorshipPlatform = {
           type: "text",
           text: "While half of the team focused on Onboarding for mentors and mentees, I led the end-to-end design of the Matching Management experience for program coordinator users.",
         },
-        { type: "subheading", label: "Exploring design directions" },
+        { type: "subheading", label: "Exploring design directions with sketching and Claude Design" },
         {
           type: "text",
           text: "My team and I proceeded to explore different design avenues through sketching and vibecoding before converging on a low-fidelity design.\n\nSimilar ways of displaying data emerged among our drawings, but our ideas diverged in the flow for navigating matching. Our entry points conflicted; one flow began with the Participant Roster, while other started with Rounds.",
