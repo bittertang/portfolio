@@ -11,8 +11,8 @@ export const profile = {
   reading: { title: "[Book title]", subtitle: "[Author name]" },
   contact: {
     email: "ivjtang@ucsc.edu",
-    linkedin: "https://www.linkedin.com/in/ivy-tang-049981208",
-    resumeHref: "https://drive.google.com/file/d/1O-IEbyov4aDI36nsCczcu-Xk-xvaeuqU/view?usp=sharing",
+    linkedin: "https://www.linkedin.com/in/ivjtang/",
+    resumeHref: "https://drive.google.com/file/d/1MLG6W8vnCNvLYcCg6RZ945D1OBS9bYiu/view?usp=sharing",
     github: "https://github.com/bittertang",
   },
 };

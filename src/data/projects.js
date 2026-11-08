@@ -22,7 +22,7 @@ import instructionGifs from "../assets/earthquake-prep-kit/instruction-gifs.mp4"
 import finalGame1 from "../assets/earthquake-prep-kit/final-game-1.mp4";
 import finalGame2 from "../assets/earthquake-prep-kit/final-game-2.mp4";
 import finalGame3 from "../assets/earthquake-prep-kit/final-game-3.mp4";
-import mentorshipHero from "../assets/mentorship-platform/mentorship-hero.mp4";
+import mentorshipHero from "../assets/mentorship-platform/mentorship-hero-v2.mp4";
 import mentorshipResearch from "../assets/mentorship-platform/v2/research.webp";
 import mentorshipAffinityBefore from "../assets/mentorship-platform/v2/affinity-diagram-before.webp";
 import mentorshipAffinityAfter from "../assets/mentorship-platform/v2/affinity-diagram-after.webp";
@@ -404,7 +404,7 @@ const ucscMentorshipPlatform = {
   company: "UC Santa Cruz",
   companyIcon: "\u{1F393}",
   listTitle: "UCSC Mentorship Platform",
-  listHeadline: "Building a scalable mentorship platform for UXers",
+  listHeadline: "Streamlining matching process and management for Admin",
   heroVideo: mentorshipHero,
   heroVideoTall: true,
   // Reserves the full viewport height around the hero (instead of just the
@@ -413,7 +413,7 @@ const ucscMentorshipPlatform = {
   // Shows the full video frame uncropped on the Works list cover (instead of
   // the usual object-cover crop) so less of it is cut off — "zoomed out".
   listHeroContain: true,
-  tags: ["0 → 1", "Web"],
+  tags: ["0 → 1", "Web", "Admin Tool"],
   alignTocWithContext: true,
   type: "",
   year: "",
@@ -858,7 +858,7 @@ const earthquakeExhibit = {
   listTitle: "The Tech Interactive Earthquake Exhibit",
   listHeadline: "Educating museum visitors about Bay Area earthquakes",
   tagline: "Educating museum visitors about earthquake geology and preparation through an interactive exhibit experience",
-  tags: ["Internship", "Fabrication", "Usability Testing"],
+  tags: ["Internship", "Physical x Digital", "Usability Testing"],
   heroImage: techInteractiveLogo,
   heroImageCompact: true,
   heroImageFull: true,
