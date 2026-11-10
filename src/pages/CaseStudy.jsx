@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { projects } from "../data/projects";
 import PlaceholderImage from "../components/PlaceholderImage";
+import MacbookFrame from "../components/MacbookFrame";
 import CaseStudySidebar from "../components/CaseStudySidebar";
 import { ProjectTile } from "../components/ProjectGrid";
 
@@ -1536,6 +1537,34 @@ function ContentBlocks({ blocks }) {
                     <img src={card.src} alt={card.label} className="mx-auto block h-auto max-w-full rounded-lg" />
                   </div>
                 )}
+              </div>
+            ))}
+          </div>
+        );
+      case "rows":
+        // Grid of rows: a caption beside an image (or a placeholder until one
+        // is supplied). Alternates sides on desktop; stacks on mobile.
+        return (
+          <div key={i} className="mt-6 grid max-w-5xl gap-12 sm:gap-20">
+            {block.items.map((row, j) => (
+              <div
+                key={row.text}
+                className="grid items-center gap-4 sm:grid-cols-3 sm:gap-6"
+              >
+                <p
+                  className={`text-base leading-relaxed text-gray-900 ${j % 2 ? "sm:order-last" : ""}`}
+                >
+                  {parseRichText(row.text)}
+                </p>
+                <MacbookFrame className="sm:col-span-2">
+                  {row.src && row.video ? (
+                    <video src={row.src} autoPlay muted loop playsInline className="block" />
+                  ) : row.src ? (
+                    <img src={row.src} alt={row.text} className="block" />
+                  ) : (
+                    <PlaceholderImage label="[Image placeholder]" />
+                  )}
+                </MacbookFrame>
               </div>
             ))}
           </div>

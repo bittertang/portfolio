@@ -32,6 +32,9 @@ import solutionMatching from "../assets/mentorship-platform/v2/solution-matching
 import solutionMentorDirectory from "../assets/mentorship-platform/v2/solution-mentor-directory.webp";
 import mentorProfile from "../assets/mentorship-platform/v2/mentor-profile.webp";
 import entryPoints from "../assets/mentorship-platform/v2/entry-points.webp";
+import finalLockInMatches from "../assets/mentorship-platform/Final_lock-in-matches.mov";
+import finalCheckMatches from "../assets/mentorship-platform/Final-check-matches.mov";
+import finalRunMatching from "../assets/mentorship-platform/Final_run-matching.mov";
 import quickStats from "../assets/mentorship-platform/v2/quick-stats.webp";
 import updatedFlow from "../assets/mentorship-platform/v2/updated-flow.webp";
 import roundsOverview from "../assets/mentorship-platform/v2/rounds-overview.webp";
@@ -418,7 +421,7 @@ const ucscMentorshipPlatform = {
   type: "",
   year: "",
   tagline:
-    "Facilitating the growth of mentor-mentee relationships in UC Santa Cruz's HCI graduate program",
+    "Admin tooling to facilitate student mentee and industry mentor matching in UC Santa Cruz's graduate program",
   cover:
     "UC Santa Cruz's Human-Computer Interaction program boasts a tight knit network of mentors in the field of Human-Computer Interaction. Our team was tasked with **creating a new platform that automated the matching process for admin and facilitated sustainable relationships for mentors and mentees**.",
   impactStats: [
@@ -430,7 +433,7 @@ const ucscMentorshipPlatform = {
     ...placeholderProject(1).meta,
     role: "UX Designer",
     tools: "Figma, Miro, Visual Studios, Claude Code",
-    team: "Ivy T. (me), Tereese B., Nicole F., Diane P.",
+    team: "2 Researchers, 4 Designers",
     timeline: "July 2026 - Now",
   },
   // Replaces every template section below the overview; each section's
@@ -648,6 +651,21 @@ const ucscMentorshipPlatform = {
               description: "Learn more about a mentor and their background.",
               src: mentorProfile,
             },
+          ],
+        },
+      ],
+    },
+    {
+      id: "final-solution",
+      label: "Final Solution",
+      title: "An Admin Tool balancing efficiency and transparency in matching",
+      blocks: [
+        {
+          type: "rows",
+          items: [
+            { text: "Lock in matches that the algorithm doesn't touch.", src: finalLockInMatches, video: true },
+            { text: "Confirm participants to begin running the algorithm.", src: finalRunMatching, video: true },
+            { text: "See formed pairs and pods in a table, with match details for transparency.", src: finalCheckMatches, video: true },
           ],
         },
       ],
