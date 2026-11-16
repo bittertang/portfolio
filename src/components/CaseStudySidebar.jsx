@@ -57,6 +57,9 @@ export default function CaseStudySidebar({
   subsections = {},
   scrollContainerRef,
   hideAllWorkLink = false,
+  // false skips the title/tagline/meta reveal (e.g. when the page is taking
+  // over from an already-open preview, so the content is already on screen).
+  animate = true,
 }) {
   const SECTIONS = getSections(project);
   const hasTags = project.tags && project.tags.length > 0;
@@ -127,9 +130,19 @@ export default function CaseStudySidebar({
       }
       navWrapperEl.style.marginTop = "0px";
       if (navEl) navEl.style.marginTop = "0px";
-      const heroBottom = heroMedia.getBoundingClientRect().bottom;
       const metaBottom = metaEl.getBoundingClientRect().bottom;
-      navWrapperEl.style.marginTop = `${Math.max(0, heroBottom - metaBottom)}px`;
+      let targetBottom = heroMedia.getBoundingClientRect().bottom;
+      if (project.metaAtFold) {
+        // A small, centered hero (e.g. a logo) would leave the meta block
+        // floating mid-screen; sit it at the bottom of the first screenful
+        // instead, where a full-height hero's bottom edge lands on the
+        // other case studies. Measured as of scrollTop 0.
+        const scrollTop = container ? container.scrollTop : window.scrollY;
+        const foldBottom = container ? container.getBoundingClientRect().bottom : window.innerHeight;
+        // Lifted 24px off the very bottom so it doesn't hug the edge.
+        targetBottom = foldBottom - scrollTop - 24;
+      }
+      navWrapperEl.style.marginTop = `${Math.max(0, targetBottom - metaBottom)}px`;
 
       if (navEl && navTarget) {
         // Measured after the wrapper shift above, so this already reflects
@@ -151,7 +164,7 @@ export default function CaseStudySidebar({
       resizeObserver.disconnect();
       window.removeEventListener("resize", update);
     };
-  }, [scrollContainerRef, project.slug, project.alignTocWithContext]);
+  }, [scrollContainerRef, project.slug, project.alignTocWithContext, project.metaAtFold]);
 
   // Whether the sticky nav has actually locked in place (its top sitting at
   // the `lg:top-10` offset) rather than just sitting in normal flow above
@@ -217,6 +230,7 @@ export default function CaseStudySidebar({
           key={`title-${project.slug}`}
           as="h1"
           text={project.title}
+          animate={animate}
           className={`font-serif text-2xl font-light leading-snug text-gray-900 ${
             hideAllWorkLink && !hasTags ? "" : "mt-4"
           }`}
@@ -225,7 +239,7 @@ export default function CaseStudySidebar({
         {project.tagline && (
           <p
             key={`tagline-${project.slug}`}
-            className="motion-safe:animate-drop-in mt-3 text-sm text-gray-600"
+            className={`${animate ? "motion-safe:animate-drop-in" : ""} mt-3 text-sm text-gray-600`}
             style={{ animationDelay: "250ms" }}
           >
             {project.tagline}
@@ -246,7 +260,7 @@ export default function CaseStudySidebar({
         <div ref={metaRef} className="flex flex-col gap-4">
           <div
             key={project.slug}
-            className="motion-safe:animate-drop-in flex flex-col gap-4"
+            className={`${animate ? "motion-safe:animate-drop-in" : ""} flex flex-col gap-4`}
             style={{ animationDelay: "400ms" }}
           >
             <div>

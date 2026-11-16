@@ -180,3 +180,11 @@
     opacity: 0;
   }
 }
+
+/* Preview → case study page hand-off (see src/lib/pageHandoff.js): a plain
+   crossfade from the open preview to the page — nothing grows or slides. */
+html.page-handoff::view-transition-old(root),
+html.page-handoff::view-transition-new(root) {
+  animation-duration: 300ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}

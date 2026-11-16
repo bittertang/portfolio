@@ -9,7 +9,8 @@ import Playground from "./pages/Playground";
 
 // The three home tabs share one page shell, so moving between them keeps the
 // scroll position. Everything else (opening or leaving a case study) starts at
-// the top.
+// the top — unless it was opened from a home-grid preview, in which case the
+// case study page restores the reader's position itself.
 const TAB_PATHS = ["/", "/playground", "/about"];
 
 function PageViewTracker() {
@@ -23,13 +24,15 @@ function PageViewTracker() {
 }
 
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, state } = useLocation();
   const previous = useRef(pathname);
 
   useEffect(() => {
     const switchedTabs = TAB_PATHS.includes(previous.current) && TAB_PATHS.includes(pathname);
     previous.current = pathname;
-    if (!switchedTabs) window.scrollTo(0, 0);
+    if (!switchedTabs && !state?.fromPreview && !state?.preview) window.scrollTo(0, 0);
+    // Only a path change should trigger this; `state` is read, not watched.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   return null;

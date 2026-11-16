@@ -1,10 +1,12 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { createPortal } from "react-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { projects } from "../data/projects";
 import PlaceholderImage from "../components/PlaceholderImage";
 import MacbookFrame from "../components/MacbookFrame";
 import CaseStudySidebar from "../components/CaseStudySidebar";
 import { ProjectTile } from "../components/ProjectGrid";
+import { finishPageHandoff, startPageHandoff } from "../lib/pageHandoff";
 
 // Animates a number counting up from 0 to `target` once `active` becomes true.
 function useCountUp(target, active, duration = 1500) {
@@ -1385,7 +1387,7 @@ function MediaGrid({ items, onImageClick, aspect = "aspect-video", grey = false 
 }
 
 // Renders a full case study (sidebar + all sections) for the given project.
-// Used both by the routed CaseStudy page and by LinkedCaseStudyModal, which
+// Used both by the routed CaseStudy page and by CaseStudyPreviewModal, which
 // renders a child project's full case study inside an overlay without
 // changing the URL.
 function ContentImage({ image, grey = false }) {
@@ -1600,7 +1602,13 @@ function ContentBlocks({ blocks }) {
   });
 }
 
-function CaseStudyContent({ project, isModal = false, scrollContainerRef, isExpanded = false }) {
+function CaseStudyContent({
+  project,
+  isModal = false,
+  scrollContainerRef,
+  isExpanded = false,
+  animate = true,
+}) {
   const [lightboxImage, setLightboxImage] = useState(null);
   const openLightbox = (image) => setLightboxImage(image);
   const [openLinkedSlug, setOpenLinkedSlug] = useState(null);
@@ -1705,6 +1713,7 @@ function CaseStudyContent({ project, isModal = false, scrollContainerRef, isExpa
           subsections={sectionSubsections || subsections}
           scrollContainerRef={scrollContainerRef}
           hideAllWorkLink={isModal}
+          animate={animate}
         />
       </aside>
 
@@ -2957,22 +2966,89 @@ function CaseStudyContent({ project, isModal = false, scrollContainerRef, isExpa
       </main>
       <Lightbox image={lightboxImage} onClose={() => setLightboxImage(null)} />
       {openLinkedSlug && (
-        <LinkedCaseStudyModal slug={openLinkedSlug} onClose={() => setOpenLinkedSlug(null)} />
+        <CaseStudyPreviewModal slug={openLinkedSlug} onClose={() => setOpenLinkedSlug(null)} />
       )}
     </div>
   );
 }
 
-// Overlay showing a linked project's full case study without navigating away
-// from the parent page. Starts as a large centered dialog with a toggle to
+// The case study inside its frame: a top bar (back on the left, the
+// expand/shrink toggle on the right) over its own scrolling area. The preview
+// dialog and the full case study page both render exactly this, so a
+// preview grown to full screen is pixel-for-pixel the page — the swap
+// between the two is invisible.
+function CaseStudyFrame({
+  project,
+  expanded,
+  onBack,
+  onToggle,
+  toggleLabel,
+  scrollContainerRef,
+  animate = true,
+  // The case study page's shrink-to-preview toggle; previews don't open on
+  // phone-sized screens, so it's hidden there.
+  hideToggleOnPhone = false,
+}) {
+  return (
+    <>
+      <div className="flex shrink-0 items-center justify-between border-b border-gray-200 px-4 py-3">
+        <button
+          type="button"
+          onClick={onBack}
+          className="flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-black"
+        >
+          ← Back
+        </button>
+        <button
+          type="button"
+          onClick={onToggle}
+          aria-label={toggleLabel}
+          className={`text-gray-600 hover:text-black ${hideToggleOnPhone ? "hidden sm:block" : ""}`}
+        >
+          <FullScreenIcon expanded={expanded} />
+        </button>
+      </div>
+      <div ref={scrollContainerRef} className="scrollbar-hidden flex-1 overflow-y-auto overscroll-contain">
+        <CaseStudyContent
+          project={project}
+          isModal
+          scrollContainerRef={scrollContainerRef}
+          isExpanded={expanded}
+          animate={animate}
+        />
+      </div>
+    </>
+  );
+}
+
+// Overlay showing a project's full case study without navigating away from
+// the page underneath. Starts as a large centered dialog with a toggle to
 // grow it to fill the screen; the back button always closes the overlay.
 // The dialog stays `fixed` in both states (only its inset/size/radius
 // change) so the grow/shrink is a plain, smoothly-animatable CSS transition
 // rather than a jump cut.
-function LinkedCaseStudyModal({ slug, onClose }) {
+//
+// With `onExpandToPage` (the home grid's previews), growing to full screen
+// lands on the real case study page once the grow finishes — the page
+// renders the same frame, so it simply carries on from there at the same
+// scroll position. `startExpanded` is the reverse trip: the page's shrink
+// toggle reopens the preview already full screen, and it shrinks from there.
+//
+// Portaled to <body> because `fixed` positions against any transformed
+// ancestor (the home tab slide / card rise-in animations) instead of the
+// viewport.
+export function CaseStudyPreviewModal({
+  slug,
+  onClose,
+  onExpandToPage,
+  startExpanded = false,
+  initialScrollTop = 0,
+}) {
   const linkedProject = projects.find((p) => p.slug === slug);
   const scrollContainerRef = useRef(null);
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(startExpanded);
+  const [handingOff, setHandingOff] = useState(false);
+  const handedOff = useRef(false);
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -2982,51 +3058,105 @@ function LinkedCaseStudyModal({ slug, onClose }) {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
 
+  // Keep the page behind from scrolling while the dialog is open.
+  useEffect(() => {
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, []);
+
+  // Coming back from the page: pick up its scroll position, then — once the
+  // full-screen frame has been painted — shrink into the preview.
+  useLayoutEffect(() => {
+    if (!startExpanded) return;
+    if (scrollContainerRef.current) scrollContainerRef.current.scrollTop = initialScrollTop;
+    finishPageHandoff();
+    const raf = requestAnimationFrame(() => requestAnimationFrame(() => setExpanded(false)));
+    return () => cancelAnimationFrame(raf);
+    // Mount-only.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (!linkedProject) return null;
 
-  return (
-    <div className="motion-safe:animate-backdrop-in fixed inset-0 z-50 bg-black/50" onClick={onClose}>
+  const handOff = () => {
+    if (handedOff.current) return;
+    handedOff.current = true;
+    onExpandToPage(scrollContainerRef.current?.scrollTop ?? 0);
+  };
+
+  const toggle = () => {
+    if (!onExpandToPage) {
+      setExpanded((e) => !e);
+      return;
+    }
+    if (handingOff) return;
+    setHandingOff(true);
+    setExpanded(true);
+    // Normally the dialog's own transitionend triggers the hand-off; this is
+    // the backstop for when no transition runs (reduced motion, already full
+    // screen, a missed event).
+    window.setTimeout(handOff, 450);
+  };
+
+  return createPortal(
+    <div
+      className={`${startExpanded ? "" : "motion-safe:animate-backdrop-in"} fixed inset-0 z-50 bg-black/50`}
+      onClick={onClose}
+    >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={linkedProject.title}
         onClick={(e) => e.stopPropagation()}
-        className={`motion-safe:animate-modal-in fixed inset-x-0 mx-auto flex flex-col overflow-hidden bg-white shadow-2xl transition-[top,height,max-width,border-radius] duration-300 ease-out ${
+        onTransitionEnd={(e) => {
+          if (handingOff && e.target === e.currentTarget && e.propertyName === "height") handOff();
+        }}
+        className={`${startExpanded ? "" : "motion-safe:animate-modal-in"} fixed inset-x-0 mx-auto flex flex-col overflow-hidden bg-white shadow-2xl transition-[top,height,max-width,border-radius] duration-300 ease-out ${
           expanded
             ? "top-0 h-screen max-w-[100vw] rounded-none"
             : "top-[5vh] h-[90vh] max-w-6xl rounded-2xl"
         }`}
       >
-        <div className="flex shrink-0 items-center justify-between border-b border-gray-200 px-4 py-3">
-          <button
-            type="button"
-            onClick={onClose}
-            className="flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-black"
-          >
-            ← Back
-          </button>
-          <button
-            type="button"
-            onClick={() => setExpanded((e) => !e)}
-            aria-label={expanded ? "Exit full screen" : "Expand to full screen"}
-            className="text-gray-600 hover:text-black"
-          >
-            <FullScreenIcon expanded={expanded} />
-          </button>
-        </div>
-        <div ref={scrollContainerRef} className="scrollbar-hidden flex-1 overflow-y-auto">
-          <CaseStudyContent
-            project={linkedProject}
-            isModal
-            scrollContainerRef={scrollContainerRef}
-            isExpanded={expanded}
-          />
-        </div>
+        <CaseStudyFrame
+          project={linkedProject}
+          expanded={expanded}
+          onBack={onClose}
+          onToggle={toggle}
+          toggleLabel={expanded ? "Exit full screen" : "Expand to full screen"}
+          scrollContainerRef={scrollContainerRef}
+        />
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
+// The full case study page: the same frame as a full-screen preview. Back
+// returns to the work grid; the shrink toggle reopens this case study as a
+// preview over the grid, at the same scroll position.
 export default function CaseStudy() {
   const { slug } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const project = projects.find((p) => p.slug === slug);
+  const scrollContainerRef = useRef(null);
+
+  // Arriving from a home-grid preview, the content is already on screen:
+  // skip the intro reveal and carry on from the preview's scroll position.
+  // Read once on mount, then cleared from history so a refresh plays the
+  // full page-load intro again.
+  const [fromPreview] = useState(() => location.state?.fromPreview ?? null);
+  useLayoutEffect(() => {
+    if (!fromPreview) return;
+    if (scrollContainerRef.current) scrollContainerRef.current.scrollTop = fromPreview.scrollTop;
+    finishPageHandoff();
+    navigate(location.pathname, { replace: true, state: null });
+    // Mount-only: this hand-off happens once per arrival.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!project) {
     return (
@@ -3039,5 +3169,25 @@ export default function CaseStudy() {
     );
   }
 
-  return <CaseStudyContent project={project} />;
+  const shrinkToPreview = () =>
+    startPageHandoff(() =>
+      navigate("/", {
+        state: { preview: { slug, scrollTop: scrollContainerRef.current?.scrollTop ?? 0 } },
+      }),
+    );
+
+  return (
+    <div className="fixed inset-0 flex flex-col bg-white">
+      <CaseStudyFrame
+        project={project}
+        expanded
+        onBack={() => navigate("/")}
+        onToggle={shrinkToPreview}
+        toggleLabel="Exit full screen"
+        scrollContainerRef={scrollContainerRef}
+        animate={!fromPreview}
+        hideToggleOnPhone
+      />
+    </div>
+  );
 }

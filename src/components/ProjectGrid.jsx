@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { projects } from "../data/projects";
+import { previewsEnabled } from "../lib/pageHandoff";
 
 // The cards rise in from below the first time the home page loads, but not
 // again when you come back to the Works tab.
@@ -88,7 +89,11 @@ const COMPACT_IMAGE_HEIGHT = "h-56 sm:h-72";
 // serif headline underneath it. Separate from `ProjectTile` above (which the
 // linked-case-study cards still use) since the two live in very different
 // layouts.
-function ProjectRow({ project, style, animateClass }) {
+//
+// With `onOpen`, a plain click opens the case study as a preview instead of
+// navigating; it stays a real link so cmd/ctrl-click and middle-click still
+// open the full page in a new tab.
+function ProjectRow({ project, style, animateClass, onOpen }) {
   // `column-span: all` breaks a card out of the two-column flow to span the
   // full row — CSS multi-column's equivalent of a grid item spanning both
   // columns. No Tailwind utility for it, so it's set directly.
@@ -99,6 +104,12 @@ function ProjectRow({ project, style, animateClass }) {
   return (
     <Link
       to={`/work/${project.slug}`}
+      onClick={(e) => {
+        if (!onOpen || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        if (!previewsEnabled()) return;
+        e.preventDefault();
+        onOpen(project.slug);
+      }}
       style={rowStyle}
       className={`group mb-6 flex break-inside-avoid flex-col overflow-hidden rounded-lg border border-gray-200 p-4 shadow-sm transition-shadow duration-300 hover:shadow-xl ${animateClass}`}
     >
@@ -160,7 +171,7 @@ function ProjectRow({ project, style, animateClass }) {
   );
 }
 
-export default function ProjectGrid() {
+export default function ProjectGrid({ onOpen }) {
   const [animate] = useState(() => !introPlayed);
   useEffect(() => {
     introPlayed = true;
@@ -174,6 +185,7 @@ export default function ProjectGrid() {
         <ProjectRow
           key={project.slug}
           project={project}
+          onOpen={onOpen}
           animateClass={animate ? "motion-safe:animate-rise-up" : ""}
           style={animate ? { animationDelay: `${0.1 + i * 0.1}s` } : undefined}
         />

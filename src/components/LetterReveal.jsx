@@ -2,8 +2,18 @@
 // in, staggered via animation-delay. A plain, fully-visible copy underneath
 // keeps it readable (and the layout stable) for reduced-motion and non-JS
 // contexts; `motion-safe:` on the letters skips the stagger entirely when
-// the visitor prefers reduced motion.
-export default function LetterReveal({ text, as: Tag = "span", className = "", stagger = 35, delay = 0 }) {
+// the visitor prefers reduced motion. `animate={false}` renders the text
+// plainly, already in place.
+export default function LetterReveal({
+  text,
+  as: Tag = "span",
+  className = "",
+  stagger = 35,
+  delay = 0,
+  animate = true,
+}) {
+  if (!animate) return <Tag className={`relative block ${className}`}>{text}</Tag>;
+
   const words = text.split(" ");
   let letterCount = 0;
 

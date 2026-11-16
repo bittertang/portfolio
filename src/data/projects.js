@@ -881,6 +881,7 @@ const earthquakeExhibit = {
   heroImageCompact: true,
   heroImageFull: true,
   heroNoPeek: true,
+  metaAtFold: true,
   type: "",
   year: "",
   tldrImage: techMuseum,
