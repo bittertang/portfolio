@@ -917,7 +917,7 @@ const zoomHybridInstruction = {
   // Breaks out of the two-column Works list to span the full width.
   listFullWidth: true,
   listHeadline: "Exploring conversational AI in hybrid instruction",
-  tagline: "Improving hybrid synchronous instruction in higher education",
+  tagline: "Reimagining hybrid synchronous instruction in higher education through conversational AI solutions",
   heroVideo: zoomHero,
   heroVideoTall: true,
   tags: ["Capstone", "Conversational AI", "Desktop"],
