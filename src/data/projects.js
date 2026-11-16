@@ -925,7 +925,7 @@ const zoomHybridInstruction = {
     ...placeholderProject(5).meta,
     role: "Product Designer\n\nProject Manager",
     tools: "",
-    team: "Alison C., Anvitha G., Jasmine D., Diane P.",
+    team: "3 Product Designers, 2 UX Researchers",
     timeline: "April 2026 - Now",
   },
   sectionTitles: {
