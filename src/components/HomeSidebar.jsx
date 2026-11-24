@@ -102,7 +102,7 @@ export default function HomeSidebar({ className = "" }) {
           <img src={starLogo} alt="" className="h-6 w-6" />
           <LetterReveal
             key={intro?.heading ?? "ivy-tang"}
-            text={intro?.heading ?? "ivy tang"}
+            text={intro?.heading ?? "Ivy Tang"}
             className="whitespace-nowrap font-serif text-3xl italic font-light text-gray-900"
           />
         </div>
@@ -119,8 +119,8 @@ export default function HomeSidebar({ className = "" }) {
             className="motion-safe:animate-drop-in font-sans text-base leading-relaxed text-gray-700"
             style={{ animationDelay: "400ms" }}
           >
-            <p className="lowercase">{profile.role}</p>
-            <p className="lowercase">{profile.education}</p>
+            <p>{profile.role}</p>
+            <p>{profile.education}</p>
           </div>
         )}
 
