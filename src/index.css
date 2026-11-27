@@ -5,6 +5,9 @@
   --font-heading: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   --font-serif: "Noto Serif", ui-serif, Georgia, "Times New Roman", serif;
 
+  /* Body text (Tailwind gray-600). */
+  --color-body: #4a5565;
+
   --animate-caret: caret-blink 1s step-end infinite;
   --animate-rise-up: rise-up 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   --animate-drop-in: drop-in 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;

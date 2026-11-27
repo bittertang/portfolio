@@ -70,7 +70,7 @@ export function ProjectTile({ project, className = "", style, imageHeight = "h-4
       </div>
 
       <div className="flex flex-col gap-1.5 pb-2 pt-5">
-        <h2 className="font-serif text-lg font-light leading-snug text-balance text-gray-900 sm:text-xl">
+        <h2 className="font-sans text-lg font-medium leading-snug text-balance text-gray-900 sm:text-xl">
           {project.title}
         </h2>
         <p className="text-sm text-gray-700">{project.tagline}</p>
@@ -156,13 +156,13 @@ function ProjectRow({ project, style, animateClass, onOpen }) {
       <div className="flex flex-col gap-1.5 pb-2 pt-5">
         {project.listTitle ? (
           <>
-            <h2 className="font-serif font-light text-lg leading-snug text-balance text-gray-900 sm:text-xl">
+            <h2 className="font-sans font-medium text-lg leading-snug text-balance text-gray-900 sm:text-xl">
               {project.listTitle}
             </h2>
             <p className="font-sans text-sm text-gray-500">{project.listHeadline || project.tagline}</p>
           </>
         ) : (
-          <h2 className="font-serif font-light text-lg leading-snug text-balance text-gray-900 sm:text-xl">
+          <h2 className="font-sans font-medium text-lg leading-snug text-balance text-gray-900 sm:text-xl">
             {project.listHeadline || project.tagline}
           </h2>
         )}

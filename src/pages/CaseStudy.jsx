@@ -74,7 +74,7 @@ function Block({ id, eyebrow, title, children }) {
       {eyebrow && (
         <p className="font-heading mb-3 text-xs uppercase tracking-widest text-gray-500">{eyebrow}</p>
       )}
-      {title && <h2 className="font-serif mb-4 text-2xl font-light sm:text-3xl">{title}</h2>}
+      {title && <h2 className="font-sans mb-4 text-2xl font-medium sm:text-3xl">{title}</h2>}
       {children}
     </section>
   );
@@ -209,7 +209,7 @@ function Subsection({ id, label, children }) {
   return (
     <div id={id} className="mt-6 scroll-mt-24 first:mt-0">
       <p className="text-sm font-semibold text-gray-900">{label}</p>
-      <p className="mt-2 max-w-5xl whitespace-pre-line text-base leading-relaxed text-gray-700">
+      <p className="mt-2 max-w-5xl whitespace-pre-line text-base leading-relaxed text-body">
         {parseRichText(children)}
       </p>
     </div>
@@ -372,11 +372,11 @@ function FindingCard({
       }}
       aria-expanded={expandable ? expanded : undefined}
       className={`relative rounded-lg border p-4 ${
-        blue ? "border-blue-100 bg-blue-50" : "border-gray-300"
+        blue ? "border-gray-200 bg-gray-50" : "border-gray-300"
       } ${expandable ? "cursor-pointer" : ""} ${
         hoverable
           ? blue
-            ? "transition-colors hover:border-blue-300"
+            ? "transition-colors hover:border-gray-400"
             : "transition-colors hover:border-gray-500 hover:bg-gray-50"
           : ""
       } ${center ? "text-center" : ""}`}
@@ -502,7 +502,7 @@ function InsightBox({ insight, label = "User Insight" }) {
         }
       }}
       aria-expanded={insight.text ? expanded : undefined}
-      className={`mb-4 rounded-lg border border-blue-100 bg-blue-50 p-4 ${
+      className={`mb-4 rounded-lg border border-gray-200 bg-gray-50 p-4 ${
         insight.text ? "cursor-pointer" : ""
       }`}
     >
@@ -523,7 +523,7 @@ function InsightBox({ insight, label = "User Insight" }) {
         )}
       </div>
       {expanded && insight.text && (
-        <p className="mt-2 text-center text-sm leading-relaxed text-gray-700">
+        <p className="mt-2 text-center text-sm leading-relaxed text-body">
           {parseRichText(insight.text)}
         </p>
       )}
@@ -538,7 +538,7 @@ function UserTestingCard({ card }) {
 
   const body = (
     <>
-      <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-700">
+      <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-body">
         {parseRichText(card.text)}
       </p>
       {card.quote && (
@@ -595,7 +595,7 @@ function UserTestingCard({ card }) {
         }
       }}
       aria-expanded={expanded}
-      className="cursor-pointer rounded-lg border border-blue-100 bg-blue-50 p-4"
+      className="cursor-pointer rounded-lg border border-gray-200 bg-gray-50 p-4"
     >
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 text-center">
@@ -613,7 +613,7 @@ function UserTestingCard({ card }) {
       </div>
       {expanded && (
         <div className="mt-2 flex flex-col gap-4 sm:flex-row sm:items-start">
-          <p className="flex-1 whitespace-pre-line text-sm leading-relaxed text-gray-700">
+          <p className="flex-1 whitespace-pre-line text-sm leading-relaxed text-body">
             {parseRichText(card.text)}
           </p>
           {card.quote && (
@@ -647,7 +647,7 @@ function RequirementCard({ item, insightStyle }) {
       aria-expanded={expanded}
       className={
         insightStyle
-          ? "cursor-pointer rounded-lg border border-blue-100 bg-blue-50 p-4"
+          ? "cursor-pointer rounded-lg border border-gray-200 bg-gray-50 p-4"
           : "cursor-pointer rounded-lg border border-gray-300 p-4 transition-colors hover:border-gray-500 hover:bg-gray-50"
       }
     >
@@ -668,7 +668,7 @@ function RequirementCard({ item, insightStyle }) {
         </span>
       </div>
       {expanded && (
-        <p className={`mt-1 text-sm leading-relaxed text-gray-700 ${insightStyle ? "text-center" : ""}`}>
+        <p className={`mt-1 text-sm leading-relaxed text-body ${insightStyle ? "text-center" : ""}`}>
           {item.description}
         </p>
       )}
@@ -688,7 +688,7 @@ function DesignRequirementsSection({
 
   return (
     <div id="design-requirements" className="mt-10 max-w-5xl scroll-mt-24">
-      {title && <h3 className="font-serif text-2xl font-light sm:text-3xl">{title}</h3>}
+      {title && <h3 className="font-sans text-2xl font-medium sm:text-3xl">{title}</h3>}
       <div className="mt-3 grid gap-4 sm:grid-cols-2">
         {requirements.items.map((item) => (
           <RequirementCard key={item.label} item={item} insightStyle={requirements.insightStyle} />
@@ -710,7 +710,7 @@ function DesignRequirementsSection({
           <div className="mt-4 pl-7">
             <MediaGrid items={media} onImageClick={onImageClick} />
             {requirements.intro && (
-              <p className="mt-4 text-base leading-relaxed text-gray-700">{requirements.intro}</p>
+              <p className="mt-4 text-base leading-relaxed text-body">{requirements.intro}</p>
             )}
             {requirements.tabs && requirements.tabs.length > 0 && (
               <Tabs
@@ -743,7 +743,7 @@ function DesignRequirementsSection({
                       )}
                       {tab.text && (
                         <p
-                          className={`text-base leading-relaxed text-gray-700 ${
+                          className={`text-base leading-relaxed text-body ${
                             tab.noImage ? "" : "mt-4"
                           }`}
                         >
@@ -781,7 +781,7 @@ function AudienceCards({ id, audience }) {
             <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-gray-300 text-xs">
               👤
             </span>
-            <p className="text-sm leading-relaxed text-gray-700">{group.description}</p>
+            <p className="text-sm leading-relaxed text-body">{group.description}</p>
           </div>
         ))}
       </div>
@@ -789,45 +789,14 @@ function AudienceCards({ id, audience }) {
   );
 }
 
-function ChallengeCard({ id, dark, orange, label = "The challenge", children }) {
-  const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`);
-    e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
-  };
-  const glow = dark || orange ? "rgba(255,255,255,0.16)" : "rgba(17,24,39,0.07)";
-
+function ChallengeCard({ id, spaceBefore, label = "The challenge", children }) {
   return (
     <div
       id={id}
-      onMouseMove={handleMouseMove}
-      className={`group relative mt-6 max-w-5xl scroll-mt-24 overflow-hidden rounded-lg p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
-        dark
-          ? "border border-blue-950 bg-blue-950 text-white"
-          : orange
-            ? "border border-orange-900 bg-orange-800 text-white"
-            : "border border-gray-900 bg-gray-50"
-      }`}
+      className={`relative ${spaceBefore ? "mt-16" : "mt-6"} max-w-5xl scroll-mt-24 overflow-hidden rounded-lg border border-gray-200 bg-gray-50 p-8`}
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{
-          background: `radial-gradient(circle 220px at var(--mx, 50%) var(--my, 50%), ${glow}, transparent 70%)`,
-        }}
-      />
-      <p
-        className={`font-heading relative text-xs uppercase tracking-widest ${
-          dark || orange ? "text-center text-white" : "text-gray-900"
-        }`}
-      >
-        {label}
-      </p>
-      <p
-        className={`relative mt-3 whitespace-pre-line text-xl font-light leading-relaxed ${
-          dark ? "text-center text-blue-100" : orange ? "text-center text-orange-50" : "text-gray-700"
-        }`}
-      >
+      <p className="font-heading relative text-center text-xs uppercase tracking-widest text-gray-500">{label}</p>
+      <p className="relative mt-3 whitespace-pre-line text-center text-xl font-light leading-relaxed text-gray-900">
         {children}
       </p>
     </div>
@@ -988,7 +957,7 @@ function ProblemSolutionGroup({ group, openLightbox }) {
         <div className="flex flex-col gap-4 rounded-lg border border-gray-300 p-4 sm:flex-row sm:items-stretch">
           <div className="flex-1">
             <p className="text-sm font-semibold text-gray-900">{problemCard.label}</p>
-            <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-gray-700">
+            <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-body">
               {problemCard.description}
             </p>
           </div>
@@ -1029,7 +998,7 @@ function ProblemSolutionGroup({ group, openLightbox }) {
                   >
                     <div className={hasMedia && !card.imageBelow ? "sm:flex-1" : ""}>
                       <p className="text-sm font-semibold text-gray-900">{card.label}</p>
-                      <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-gray-700">
+                      <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-body">
                         {card.description}
                       </p>
                     </div>
@@ -1457,7 +1426,12 @@ function CollapsibleBlock({ block }) {
       {expanded && (
         <div className="px-4 pb-4">
           {block.text && (
-            <p className="text-sm leading-relaxed text-gray-700">{parseRichText(block.text)}</p>
+            <p className="text-sm leading-relaxed text-body">{parseRichText(block.text)}</p>
+          )}
+          {block.src && (
+            <div className="mt-6 flex items-center rounded-lg bg-gray-50 p-4">
+              <ContentImage image={block} />
+            </div>
           )}
           {block.tabs && (
             <Tabs
@@ -1588,7 +1562,7 @@ function ContentBlocks({ blocks }) {
         return (
           <p
             key={i}
-            className="mt-4 max-w-5xl whitespace-pre-line text-base leading-relaxed text-gray-700 first:mt-0"
+            className="mt-4 max-w-5xl whitespace-pre-line text-base leading-relaxed text-body first:mt-0"
           >
             {parseRichText(block.text)}
           </p>
@@ -1602,14 +1576,14 @@ function ContentBlocks({ blocks }) {
           <h3
             key={i}
             id={slugify(block.label)}
-            className="font-serif mt-12 scroll-mt-24 text-2xl font-light first:mt-0"
+            className={`font-sans ${block.spaceBefore ? "mt-20" : "mt-12"} scroll-mt-24 text-2xl font-medium first:mt-0`}
           >
             {block.label}
           </h3>
         );
       case "image":
         return (
-          <div key={i} className={`mt-6 max-w-5xl ${block.spaceAfter ? "mb-20" : ""}`}>
+          <div key={i} className={`mt-6 max-w-5xl ${block.spaceAfter ? "mb-20" : ""} ${block.padded ? "py-10" : ""}`}>
             <div className={block.narrow ? "mx-auto sm:w-4/5" : ""}>
               {block.src ? (
                 <ContentImage image={block} grey={block.grey} />
@@ -1631,7 +1605,7 @@ function ContentBlocks({ blocks }) {
         return <AudienceCards key={i} id={block.id} audience={{ groups: block.groups }} />;
       case "challenge":
         return (
-          <ChallengeCard key={i} id={block.id} dark>
+          <ChallengeCard key={i} id={block.id} spaceBefore={block.spaceBefore}>
             {block.text}
           </ChallengeCard>
         );
@@ -1666,7 +1640,7 @@ function ContentBlocks({ blocks }) {
               <div key={card.label} className="flex flex-col rounded-lg border border-gray-300 p-4">
                 <p className="text-sm font-semibold text-gray-900">{card.label}</p>
                 {card.description && (
-                  <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                  <p className="mt-2 text-sm leading-relaxed text-body">
                     {parseRichText(card.description)}
                   </p>
                 )}
@@ -1692,7 +1666,7 @@ function ContentBlocks({ blocks }) {
                 <div className="self-center">
                   <p className="text-sm font-semibold text-gray-900">{row.label}</p>
                   {row.description && (
-                    <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                    <p className="mt-2 text-sm leading-relaxed text-body">
                       {parseRichText(row.description)}
                     </p>
                   )}
@@ -1720,9 +1694,9 @@ function ContentBlocks({ blocks }) {
       case "panel":
         return (
           <div key={i} className="mt-6 max-w-5xl rounded-lg border border-gray-300 p-4 sm:p-6">
-            <p className="font-serif text-2xl font-light text-gray-900">{block.label}</p>
+            <p className="font-sans text-2xl font-medium text-gray-900">{block.label}</p>
             {block.description && (
-              <p className="mt-2 text-sm leading-relaxed text-gray-700">{block.description}</p>
+              <p className="mt-2 text-sm leading-relaxed text-body">{block.description}</p>
             )}
             <div className="mt-4 rounded-lg bg-gray-100 p-4 sm:p-8">
               <img src={block.src} alt={block.label} className="block h-auto w-full rounded-lg shadow-sm" />
@@ -1737,7 +1711,7 @@ function ContentBlocks({ blocks }) {
                     <img key={image.alt} src={image.src} alt={image.alt} className="block h-auto w-full rounded-lg border border-gray-200" />
                   ))}
                 </div>
-                <p className="mt-4 text-sm leading-relaxed text-gray-700">{block.extra.text}</p>
+                <p className="mt-4 text-sm leading-relaxed text-body">{block.extra.text}</p>
               </div>
             )}
           </div>
@@ -1833,20 +1807,15 @@ function CaseStudyContent({
   };
 
   // Projects that define freeform `sections` replace every template section
-  // below the overview; their nav subsections come from linkable blocks.
+  // below the overview; their nav subsections come from blocks with a
+  // `navLabel` (subheadings are left out of the nav).
   const sectionSubsections =
     project.sections &&
     Object.fromEntries(
       project.sections.filter((section) => !section.hidden).map((section) => [
         section.id,
         section.blocks
-          .map((block) =>
-            block.type === "subheading" && block.nav !== false
-              ? { id: slugify(block.label), label: block.label }
-              : block.id && block.navLabel
-                ? { id: block.id, label: block.navLabel }
-                : null,
-          )
+          .map((block) => (block.id && block.navLabel ? { id: block.id, label: block.navLabel } : null))
           .filter(Boolean),
       ]),
     );
@@ -1948,7 +1917,7 @@ function CaseStudyContent({
               )}
               <div>
                 <p className="text-xs uppercase tracking-widest text-gray-500">TLDR</p>
-                <p className="mt-2 whitespace-pre-line text-base leading-relaxed text-gray-700">
+                <p className="mt-2 whitespace-pre-line text-base leading-relaxed text-body">
                   {parseRichText(project.cover)}
                 </p>
                 {project.finalConceptCta && (
@@ -2020,20 +1989,18 @@ function CaseStudyContent({
         >
           {project.problem.plainText ? (
             <>
-              <p className="max-w-5xl whitespace-pre-line text-base leading-relaxed text-gray-700">
+              <p className="max-w-5xl whitespace-pre-line text-base leading-relaxed text-body">
                 {parseRichText(project.problem.plainText)}
               </p>
               {project.problem.challenge && (
                 <ChallengeCard
-                  dark={project.challengeDark}
-                  orange={project.challengeOrange}
                   label={project.problem.challengeLabel}
                 >
                   {project.problem.challenge}
                 </ChallengeCard>
               )}
               {project.problem.notice && (
-                <div className="mt-4 max-w-5xl rounded-lg p-4 text-sm leading-relaxed text-gray-700">
+                <div className="mt-4 max-w-5xl rounded-lg p-4 text-sm leading-relaxed text-body">
                   {parseRichText(project.problem.notice)}
                 </div>
               )}
@@ -2044,7 +2011,7 @@ function CaseStudyContent({
             {project.problem.significance}
           </Subsection>
           {project.problem.theAsk && (
-            <p className="mt-4 max-w-5xl whitespace-pre-line text-base leading-relaxed text-gray-700">
+            <p className="mt-4 max-w-5xl whitespace-pre-line text-base leading-relaxed text-body">
               {parseRichText(project.problem.theAsk)}
             </p>
           )}
@@ -2054,7 +2021,7 @@ function CaseStudyContent({
               {project.problem.approach}
             </Subsection>
           )}
-          <ChallengeCard id="challenge" dark={project.challengeDark} orange={project.challengeOrange}>
+          <ChallengeCard id="challenge">
             {project.problem.challenge}
           </ChallengeCard>
             </>
@@ -2064,7 +2031,7 @@ function CaseStudyContent({
 
         {project.solution && (
           <Block id="solution" eyebrow={numbered("Solution")} title={project.sectionTitles?.solution}>
-            <p className="max-w-5xl whitespace-pre-line text-base leading-relaxed text-gray-700">
+            <p className="max-w-5xl whitespace-pre-line text-base leading-relaxed text-body">
               {parseRichText(project.solution)}
             </p>
             {project.solutionFeatures &&
@@ -2076,7 +2043,7 @@ function CaseStudyContent({
                   <div className="sm:w-56 sm:shrink-0">
                     <p className="font-serif text-2xl font-light text-gray-900">{feature.label}</p>
                     {feature.description && (
-                      <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                      <p className="mt-2 text-sm leading-relaxed text-body">
                         {feature.description}
                       </p>
                     )}
@@ -2149,7 +2116,7 @@ function CaseStudyContent({
               <PlaceholderImage label="[Image placeholder]" className="aspect-video w-full" />
             )}
           </Zoomable>
-          <p className="max-w-5xl whitespace-pre-line text-base leading-relaxed text-gray-700">
+          <p className="max-w-5xl whitespace-pre-line text-base leading-relaxed text-body">
             {parseRichText(project.research.intro)}
           </p>
           {project.research.findings && project.research.findings.length > 0 && (
@@ -2214,18 +2181,18 @@ function CaseStudyContent({
           {project.research.mappingTheFlow && (
             <div id="mapping-the-flow" className="mt-10 max-w-5xl scroll-mt-24">
               {project.research.mappingTheFlowTitle !== "" && (
-                <h3 className="font-serif text-2xl font-light sm:text-3xl">
+                <h3 className="font-sans text-2xl font-medium sm:text-3xl">
                   {project.research.mappingTheFlowTitle || "Mapping the Flow"}
                 </h3>
               )}
-              <p className="mt-3 text-base leading-relaxed text-gray-700">
+              <p className="mt-3 text-base leading-relaxed text-body">
                 {project.research.mappingTheFlow}
               </p>
               <div className={project.research.mappingTheFlowCompact ? "max-w-sm" : ""}>
                 <MediaGrid items={project.media?.mappingTheFlow} onImageClick={openLightbox} />
               </div>
               {project.research.mappingTheFlowOutro && (
-                <p className="mt-4 text-base leading-relaxed text-gray-700">
+                <p className="mt-4 text-base leading-relaxed text-body">
                   {parseRichText(project.research.mappingTheFlowOutro)}
                 </p>
               )}
@@ -2255,7 +2222,7 @@ function CaseStudyContent({
                             {project.research.mappingTheFlowColumns.map((column) => (
                               <td
                                 key={column.label}
-                                className="border-t border-gray-200 p-4 align-top leading-relaxed text-gray-700"
+                                className="border-t border-gray-200 p-4 align-top leading-relaxed text-body"
                               >
                                 {column.cards[rowIndex] || ""}
                               </td>
@@ -2320,7 +2287,7 @@ function CaseStudyContent({
                   )}
                 </Zoomable>
               </div>
-              <p className="flex-1 text-base leading-relaxed text-gray-700">
+              <p className="flex-1 text-base leading-relaxed text-body">
                 {parseRichText(project.userTestingIntro)}
               </p>
             </div>
@@ -2333,7 +2300,7 @@ function CaseStudyContent({
                 className="mt-10 max-w-5xl scroll-mt-24"
               >
                 {group.label && (
-                  <h3 className="font-serif mb-4 text-2xl font-light sm:text-3xl">{group.label}</h3>
+                  <h3 className="font-sans mb-4 text-2xl font-medium sm:text-3xl">{group.label}</h3>
                 )}
                 <div className="space-y-4">
                   {(group.cards || [group]).map((card, j) =>
@@ -2409,7 +2376,7 @@ function CaseStudyContent({
           {!project.userTestingIntro && (
             <p
               id="prototyping-intro"
-              className="max-w-5xl scroll-mt-24 whitespace-pre-line text-base leading-relaxed text-gray-700"
+              className="max-w-5xl scroll-mt-24 whitespace-pre-line text-base leading-relaxed text-body"
             >
               {project.prototyping}
             </p>
@@ -2444,7 +2411,7 @@ function CaseStudyContent({
                     ))}
                   {tab.text && (
                     <p
-                      className={`whitespace-pre-line text-base leading-relaxed text-gray-700 ${
+                      className={`whitespace-pre-line text-base leading-relaxed text-body ${
                         tab.noImage ? "" : "mt-4"
                       }`}
                     >
@@ -2464,12 +2431,12 @@ function CaseStudyContent({
                     onImageClick={openLightbox}
                   />
                 </div>
-                <p className="whitespace-pre-line text-base leading-relaxed text-gray-700 sm:w-1/2">
+                <p className="whitespace-pre-line text-base leading-relaxed text-body sm:w-1/2">
                   {project.prototypingProcess}
                 </p>
               </div>
               {project.prototypingOutro && (
-                <p className="mt-6 max-w-5xl whitespace-pre-line text-base leading-relaxed text-gray-700">
+                <p className="mt-6 max-w-5xl whitespace-pre-line text-base leading-relaxed text-body">
                   {project.prototypingOutro}
                 </p>
               )}
@@ -2485,7 +2452,7 @@ function CaseStudyContent({
                         {project.prototypingLimitationLabel}
                       </p>
                     )}
-                    <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-gray-700">
+                    <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-body">
                       {parseRichText(project.prototypingLimitation)}
                     </p>
                   </div>
@@ -2523,7 +2490,7 @@ function CaseStudyContent({
                 </Zoomable>
               </div>
               {project.prototypingHeroText && (
-                <p className="mt-4 text-base leading-relaxed text-gray-700">
+                <p className="mt-4 text-base leading-relaxed text-body">
                   {parseRichText(project.prototypingHeroText)}
                 </p>
               )}
@@ -2533,11 +2500,11 @@ function CaseStudyContent({
             (project.translatingResearchGroups &&
               project.translatingResearchGroups.length > 0)) && (
             <div id="translating-research" className="mt-10 max-w-5xl scroll-mt-24">
-              <h3 className="font-serif text-2xl font-light sm:text-3xl">
+              <h3 className="font-sans text-2xl font-medium sm:text-3xl">
                 {project.translatingResearchTitle || "Translating research into design"}
               </h3>
               {project.translatingResearch && (
-                <p className="mt-3 text-base leading-relaxed text-gray-700">
+                <p className="mt-3 text-base leading-relaxed text-body">
                   {project.translatingResearch}
                 </p>
               )}
@@ -2550,10 +2517,10 @@ function CaseStudyContent({
           )}
           {project.expandingMentorship && (
             <div id="expanding-mentorship" className="mt-10 max-w-5xl scroll-mt-24">
-              <h3 className="font-serif text-2xl font-light sm:text-3xl">
+              <h3 className="font-sans text-2xl font-medium sm:text-3xl">
                 Expanding mentorship opportunities
               </h3>
-              <p className="mt-3 text-base leading-relaxed text-gray-700">
+              <p className="mt-3 text-base leading-relaxed text-body">
                 {parseRichText(project.expandingMentorship)}
               </p>
               {project.expandingMentorshipGroups &&
@@ -2573,7 +2540,7 @@ function CaseStudyContent({
           >
             <p
               id="round-2-testing-intro"
-              className="max-w-5xl scroll-mt-24 text-base leading-relaxed text-gray-700"
+              className="max-w-5xl scroll-mt-24 text-base leading-relaxed text-body"
             >
               {parseRichText(project.round2TestingSection.text)}
             </p>
@@ -2607,7 +2574,7 @@ function CaseStudyContent({
                       </div>
                       <div className={card.video ? "flex-1" : "sm:w-1/2"}>
                         <p className="text-sm font-semibold text-gray-900">{card.header}</p>
-                        <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                        <p className="mt-2 text-sm leading-relaxed text-body">
                           {parseRichText(card.text)}
                         </p>
                       </div>
@@ -2621,7 +2588,7 @@ function CaseStudyContent({
                 id={slugify(project.round2TestingSection.subsectionTitle)}
                 className="mt-10 max-w-5xl scroll-mt-24"
               >
-                <h3 className="font-serif text-2xl font-light sm:text-3xl">
+                <h3 className="font-sans text-2xl font-medium sm:text-3xl">
                   {project.round2TestingSection.subsectionTitle}
                 </h3>
                 {project.round2TestingSection.subsectionImage ? (
@@ -2643,7 +2610,7 @@ function CaseStudyContent({
                       </Zoomable>
                     </div>
                     {project.round2TestingSection.subsectionText && (
-                      <p className="mt-4 text-base leading-relaxed text-gray-700">
+                      <p className="mt-4 text-base leading-relaxed text-body">
                         {parseRichText(project.round2TestingSection.subsectionText)}
                       </p>
                     )}
@@ -2651,7 +2618,7 @@ function CaseStudyContent({
                 ) : (
                   <>
                     {project.round2TestingSection.subsectionText && (
-                      <p className="mt-3 text-base leading-relaxed text-gray-700">
+                      <p className="mt-3 text-base leading-relaxed text-body">
                         {parseRichText(project.round2TestingSection.subsectionText)}
                       </p>
                     )}
@@ -2667,11 +2634,11 @@ function CaseStudyContent({
             )}
             {project.technicalChallenges && (
               <div id="technical-challenges" className="mt-10 max-w-5xl scroll-mt-24">
-                <h3 className="font-serif text-2xl font-light sm:text-3xl">
+                <h3 className="font-sans text-2xl font-medium sm:text-3xl">
                   {project.technicalChallenges.title}
                 </h3>
                 {project.technicalChallenges.intro && (
-                  <p className="mt-3 text-base leading-relaxed text-gray-700">
+                  <p className="mt-3 text-base leading-relaxed text-body">
                     {parseRichText(project.technicalChallenges.intro)}
                   </p>
                 )}
@@ -2680,7 +2647,7 @@ function CaseStudyContent({
                     {project.technicalChallenges.cards.map((concept, i) => (
                       <div key={i} className="rounded-lg border border-gray-300 p-4">
                         <p className="text-sm font-semibold text-gray-900">{concept.label}</p>
-                        <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                        <p className="mt-2 text-sm leading-relaxed text-body">
                           {concept.description}
                         </p>
                       </div>
@@ -2699,7 +2666,7 @@ function CaseStudyContent({
                 {project.nextSteps.cards.map((card, i) => (
                   <div key={i} className="rounded-lg border border-gray-300 p-4">
                     <p className="text-sm font-semibold text-gray-900">{card.label}</p>
-                    <p className="mt-2 text-sm leading-relaxed text-gray-700">{card.description}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-body">{card.description}</p>
                   </div>
                 ))}
               </div>
@@ -2713,7 +2680,7 @@ function CaseStudyContent({
           eyebrow={numbered("Usability Testing")}
           title={project.sectionTitles?.failedConcepts}
         >
-          <p className="max-w-5xl text-base leading-relaxed text-gray-700">
+          <p className="max-w-5xl text-base leading-relaxed text-body">
             {project.failedConcepts.intro}
           </p>
           {(project.media?.failedConcepts?.length > 0 ||
@@ -2722,12 +2689,14 @@ function CaseStudyContent({
               {project.media?.failedConcepts && project.media.failedConcepts.length > 0 && (
                 <div className="sm:w-1/2">
                   <p className="font-heading text-xs uppercase tracking-widest text-gray-500">Setup</p>
-                  <HoverableTokenPreview
-                    items={project.media.failedConcepts}
-                    onImageClick={openLightbox}
-                    aspect="aspect-[4/3]"
-                    hideTabs
-                  />
+                  <div className="mt-4">
+                    <HoverableTokenPreview
+                      items={project.media.failedConcepts}
+                      onImageClick={openLightbox}
+                      aspect="aspect-[4/3]"
+                      hideTabs
+                    />
+                  </div>
                 </div>
               )}
               {project.failedConcepts.takeaways && project.failedConcepts.takeaways.length > 0 && (
@@ -2735,7 +2704,7 @@ function CaseStudyContent({
                   <p className="font-heading text-xs uppercase tracking-widest text-gray-500">Takeaways</p>
                   <div className="mt-4 space-y-3">
                     {project.failedConcepts.takeaways.map((takeaway, i) => (
-                      <FindingCard key={i} index={i + 1} text={takeaway} icon={<CheckIcon />} forceExpanded />
+                      <FindingCard key={i} index={i + 1} text={takeaway} icon={<CheckIcon />} />
                     ))}
                   </div>
                 </div>
@@ -2744,7 +2713,7 @@ function CaseStudyContent({
           )}
           {project.failedConcepts.concepts && project.failedConcepts.concepts.length > 0 && (
             <div id="limitations" className="mt-10 max-w-5xl scroll-mt-24">
-              <h3 className="font-serif text-2xl font-light sm:text-3xl">Testing Challenges</h3>
+              <h3 className="font-sans text-2xl font-medium sm:text-3xl">Testing Challenges</h3>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 {project.failedConcepts.concepts.map((concept) => (
                   <ConceptCard key={concept.label} concept={concept} />
@@ -2754,10 +2723,10 @@ function CaseStudyContent({
           )}
           {project.iterations.round2Testing && (
             <div id="round2-testing" className="mt-10 max-w-5xl scroll-mt-24">
-              <h3 className="font-serif text-2xl font-light sm:text-3xl">
+              <h3 className="font-sans text-2xl font-medium sm:text-3xl">
                 Gameplay iterations emerged from a second round of testing.
               </h3>
-              <p className="mt-3 whitespace-pre-line text-base leading-relaxed text-gray-700">
+              <p className="mt-3 whitespace-pre-line text-base leading-relaxed text-body">
                 {project.iterations.round2Testing.intro}
               </p>
               <div className="max-w-5xl">
@@ -2767,7 +2736,7 @@ function CaseStudyContent({
                     <p className="font-heading text-xs uppercase tracking-widest text-gray-500">
                       Setup Changes
                     </p>
-                    <p className="mt-2 text-base leading-relaxed text-gray-700">
+                    <p className="mt-2 text-base leading-relaxed text-body">
                       {project.iterations.round2Testing.studyDetails}
                     </p>
                   </div>
@@ -2839,7 +2808,7 @@ function CaseStudyContent({
 
         {!project.hideIterations && (
         <Block id="iterations" eyebrow={numbered("Iterations")} title={project.sectionTitles?.iterations}>
-          <p className="max-w-5xl text-base leading-relaxed text-gray-700">
+          <p className="max-w-5xl text-base leading-relaxed text-body">
             {project.iterations.intro}
           </p>
           <Tabs
@@ -2862,7 +2831,7 @@ function CaseStudyContent({
                       <p className="font-heading text-xs uppercase tracking-widest text-gray-500">
                         {label}
                       </p>
-                      <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                      <p className="mt-2 text-sm leading-relaxed text-body">
                         {parseRichText(rest)}
                       </p>
                     </div>
@@ -2880,22 +2849,22 @@ function CaseStudyContent({
           eyebrow={numbered("Design System")}
           title={project.sectionTitles?.designSystem}
         >
-          <p className="max-w-5xl text-base leading-relaxed text-gray-700">
+          <p className="max-w-5xl text-base leading-relaxed text-body">
             {parseRichText(project.designSystem)}
           </p>
           <MediaGrid items={project.media?.designSystem} onImageClick={openLightbox} grey />
           {project.copywriting && (
             <div id="copywriting" className="mt-10 max-w-5xl scroll-mt-24">
-              <h3 className="font-serif text-2xl font-light sm:text-3xl">Copywriting Guidelines</h3>
-              <p className="mt-3 text-base leading-relaxed text-gray-700">{project.copywriting}</p>
+              <h3 className="font-sans text-2xl font-medium sm:text-3xl">Copywriting Guidelines</h3>
+              <p className="mt-3 text-base leading-relaxed text-body">{project.copywriting}</p>
               <MediaGrid items={project.media?.copywriting} onImageClick={openLightbox} />
             </div>
           )}
           {project.aiDesignDecisions && (
             <div id="ai-design-decisions" className="mt-10 max-w-5xl scroll-mt-24">
-              <h3 className="font-serif text-2xl font-light sm:text-3xl">AI-design decisions</h3>
+              <h3 className="font-sans text-2xl font-medium sm:text-3xl">AI-design decisions</h3>
               <div className="mt-3 flex flex-col gap-6 sm:flex-row sm:items-start">
-                <p className="text-base leading-relaxed text-gray-700 sm:w-1/2">
+                <p className="text-base leading-relaxed text-body sm:w-1/2">
                   {parseRichText(project.aiDesignDecisions)}
                 </p>
                 <div className="rounded-lg bg-gray-100 p-3 sm:w-1/2">
@@ -2928,7 +2897,7 @@ function CaseStudyContent({
           title={project.mvpSection.title}
         >
           {project.mvpSection.text && (
-            <p className="max-w-5xl whitespace-pre-line text-base leading-relaxed text-gray-700">
+            <p className="max-w-5xl whitespace-pre-line text-base leading-relaxed text-body">
               {parseRichText(project.mvpSection.text)}
             </p>
           )}
@@ -2948,7 +2917,7 @@ function CaseStudyContent({
                 </div>,
                 <div key={`text-${i}`}>
                   <p className="font-serif text-2xl font-light text-gray-900">{item.label}</p>
-                  <p className="mt-2 text-sm leading-relaxed text-gray-700">{item.description}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-body">{item.description}</p>
                 </div>,
               ])}
             </div>
@@ -2963,7 +2932,7 @@ function CaseStudyContent({
           title={project.sectionTitles?.finalFlow}
         >
           {project.finalFlow && (
-            <p className="max-w-5xl text-base leading-relaxed text-gray-700">{project.finalFlow}</p>
+            <p className="max-w-5xl text-base leading-relaxed text-body">{project.finalFlow}</p>
           )}
           {project.finalFlowWallProjection || project.finalFlowDeviceFrame ? (
             <FinalFlowMockups project={project} openLightbox={openLightbox} />
@@ -3003,7 +2972,7 @@ function CaseStudyContent({
                 ),
                 <div key={`text-${i}`}>
                   <p className="font-serif text-xl font-light">{feature.label}</p>
-                  <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                  <p className="mt-2 text-sm leading-relaxed text-body">
                     {feature.description}
                   </p>
                 </div>,
@@ -3041,7 +3010,7 @@ function CaseStudyContent({
           title={project.sectionTitles?.reflection}
         >
           {project.reflection && (
-            <p className="max-w-5xl whitespace-pre-line text-base leading-relaxed text-gray-700">
+            <p className="max-w-5xl whitespace-pre-line text-base leading-relaxed text-body">
               {project.reflection}
             </p>
           )}
@@ -3050,18 +3019,18 @@ function CaseStudyContent({
               {project.reflectionCards.map((card, i) => (
                 <div key={i} className="rounded-lg border border-gray-300 p-4">
                   <p className="text-sm font-semibold text-gray-900">{card.label}</p>
-                  <p className="mt-2 text-sm leading-relaxed text-gray-700">{card.description}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-body">{card.description}</p>
                 </div>
               ))}
             </div>
           )}
           {project.outcomeUnderReflection && !project.hideOutcome && (
             <div id="outcome" className="mt-10 max-w-5xl scroll-mt-24">
-              <h3 className="font-serif text-2xl font-light sm:text-3xl">
+              <h3 className="font-sans text-2xl font-medium sm:text-3xl">
                 {project.sectionTitles?.outcome}
               </h3>
               {project.outcome && (
-                <p className="mt-3 whitespace-pre-line text-base leading-relaxed text-gray-700">
+                <p className="mt-3 whitespace-pre-line text-base leading-relaxed text-body">
                   {project.outcome}
                 </p>
               )}
@@ -3070,7 +3039,7 @@ function CaseStudyContent({
                   {project.outcomeCards.map((card, i) => (
                     <div key={i} className="rounded-lg border border-gray-300 p-4">
                       <p className="text-sm font-semibold text-gray-900">{card.label}</p>
-                      <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                      <p className="mt-2 text-sm leading-relaxed text-body">
                         {card.description}
                       </p>
                     </div>
@@ -3090,7 +3059,7 @@ function CaseStudyContent({
           title={project.sectionTitles?.outcome}
         >
           {project.outcome && (
-            <p className="max-w-5xl whitespace-pre-line text-base leading-relaxed text-gray-700">
+            <p className="max-w-5xl whitespace-pre-line text-base leading-relaxed text-body">
               {project.outcome}
             </p>
           )}
@@ -3099,7 +3068,7 @@ function CaseStudyContent({
               {project.outcomeCards.map((card, i) => (
                 <div key={i} className="rounded-lg border border-gray-300 p-4">
                   <p className="text-sm font-semibold text-gray-900">{card.label}</p>
-                  <p className="mt-2 text-sm leading-relaxed text-gray-700">{card.description}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-body">{card.description}</p>
                 </div>
               ))}
             </div>

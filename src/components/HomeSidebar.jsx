@@ -9,9 +9,9 @@ import LetterReveal from "./LetterReveal";
 import SparkleTrail from "./SparkleTrail";
 
 const SECTION_LINKS = [
-  { label: "works", to: "/" },
-  { label: "garden", to: "/playground" },
-  { label: "about", to: "/about" },
+  { label: "Works", to: "/" },
+  { label: "Garden", to: "/playground" },
+  { label: "About", to: "/about" },
 ];
 
 // On Garden and About, the identity block at the top swaps from "ivy tang" +
@@ -20,13 +20,13 @@ const SECTION_LINKS = [
 const TAB_INTROS = {
   "/playground": {
     heading: "garden",
-    blurb: "welcome to my digital garden! dabbling in AI, fabrication, and physical design.",
+    blurb: "Welcome to my digital garden! Dabbling in AI, fabrication, and physical design.",
     image: flowers,
     imageClass: "left-10 w-80",
   },
   "/about": {
     heading: "about",
-    blurb: "a little bit about my background and current side quests.",
+    blurb: "A little bit about my background and current side quests.",
     image: plant,
     imageClass: "left-10 w-80",
   },
@@ -80,7 +80,7 @@ function EmailLink() {
       title={profile.contact.email}
       className="inline-block transform text-left text-gray-700 transition-all duration-150 hover:translate-x-0.5 hover:text-gray-900"
     >
-      <span aria-live="polite">{copied ? "copied!" : "email"}</span>
+      <span aria-live="polite">{copied ? "Copied!" : "Email"}</span>
     </button>
   );
 }
@@ -128,10 +128,10 @@ export default function HomeSidebar({ className = "" }) {
 
       <nav
         aria-label="Sections"
-        className="motion-safe:animate-drop-in font-heading flex flex-col gap-1.5 text-xs"
+        className="motion-safe:animate-drop-in font-sans flex flex-col gap-1.5 text-xs"
         style={{ animationDelay: "650ms" }}
       >
-        <p className="text-gray-400">nav</p>
+        <p className="text-gray-400">Contents</p>
         {SECTION_LINKS.map((link, i) => (
           <div key={link.to} className="flex gap-2">
             <span className="text-gray-400">{i + 1}.</span>
@@ -165,10 +165,10 @@ export default function HomeSidebar({ className = "" }) {
           />
 
           <div
-            className="motion-safe:animate-drop-in relative z-10 font-heading flex flex-col gap-2 text-xs"
+            className="motion-safe:animate-drop-in relative z-10 font-sans flex flex-col gap-2 text-xs"
             style={{ animationDelay: "900ms" }}
           >
-            <p className="text-gray-400">links</p>
+            <p className="text-gray-400">Links</p>
             <ol className="flex flex-col gap-1.5 text-gray-700">
               <li className="flex gap-2">
                 <span className="text-gray-400">4.</span>
@@ -182,7 +182,7 @@ export default function HomeSidebar({ className = "" }) {
                   rel="noopener noreferrer"
                   className="inline-block transform transition-all duration-150 hover:translate-x-0.5 hover:text-gray-900"
                 >
-                  linkedin
+                  LinkedIn
                 </a>
               </li>
               <li className="flex gap-2">
@@ -193,7 +193,7 @@ export default function HomeSidebar({ className = "" }) {
                   rel="noopener noreferrer"
                   className="inline-block transform transition-all duration-150 hover:translate-x-0.5 hover:text-gray-900"
                 >
-                  resume
+                  Resume
                 </a>
               </li>
               <li className="flex gap-2">
@@ -204,7 +204,7 @@ export default function HomeSidebar({ className = "" }) {
                   rel="noopener noreferrer"
                   className="inline-block transform transition-all duration-150 hover:translate-x-0.5 hover:text-gray-900"
                 >
-                  github
+                  GitHub
                 </a>
               </li>
             </ol>

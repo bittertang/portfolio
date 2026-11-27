@@ -24,7 +24,6 @@ import finalGame2 from "../assets/earthquake-prep-kit/final-game-2.mp4";
 import finalGame3 from "../assets/earthquake-prep-kit/final-game-3.mp4";
 import mentorshipHero from "../assets/mentorship-platform/mentorship-hero-v2.mp4";
 import mentorshipResearch from "../assets/mentorship-platform/v2/research.webp";
-import mentorshipAffinityBefore from "../assets/mentorship-platform/v2/affinity-diagram-before.webp";
 import mentorshipAffinityAfter from "../assets/mentorship-platform/v2/affinity-diagram-after.webp";
 import currentProcess from "../assets/mentorship-platform/v2/current-process.webp";
 import solutionOnboarding from "../assets/mentorship-platform/v2/solution-onboarding.webp";
@@ -177,7 +176,6 @@ function placeholderProject(n) {
 const earthquakeDiyPrepKitGame = {
   slug: "project-2",
   title: "DIY Prep Kit Game",
-  challengeOrange: true,
   tagline: "Educating Bay Areans about earthquake preparation through an interactive tabletop game",
   tags: [],
   type: "",
@@ -445,12 +443,11 @@ const ucscMentorshipPlatform = {
     {
       id: "background",
       label: "Background",
-      title: "The task: a central hub for admin, mentors, and mentees",
+      title: "Mentor-mentee relationships aren’t lasting.",
       blocks: [
-        { type: "subheading", label: "Background", nav: false },
         {
           type: "text",
-          text: "The UCSC HCI Mentorship program's goal is to help students create meaningful relationships with industry mentors.\n\nCurrently, there are gaps in the way the program's run. The administrative side is conducted manually, matching isn't perfect, and relationships don't last.",
+          text: "The UCSC HCI Mentorship program's goal is to help students create meaningful relationships with industry mentors.\n\nCurrently, there are bumps in the way the program’s run. The administrative side is conducted manually, matching isn’t perfect, and mentee-mentor relationships fade off before the school year’s even over.",
         },
         {
           type: "audience",
@@ -461,12 +458,6 @@ const ucscMentorshipPlatform = {
             { label: "Mentors", description: "Mentors" },
             { label: "Student Mentees", description: "Student Mentees" },
           ],
-        },
-        {
-          type: "challenge",
-          id: "challenge",
-          navLabel: "The challenge",
-          text: "How might we design a platform that…\n1) streamlines the administrative side of matching to create optimal pairings\n2) helps cultivate sustainable professional relationships in the program?",
         },
       ],
     },
@@ -489,11 +480,6 @@ const ucscMentorshipPlatform = {
                 "The Program Coordinator runs the matching algorithm, creating pairs and pods based on onboarding data.",
               src: solutionMatching,
             },
-            {
-              label: "Mentor Directory",
-              description: "Post-match, mentees still have the opportunity to connect with other mentors.",
-              src: solutionMentorDirectory,
-            },
           ],
         },
       ],
@@ -501,7 +487,7 @@ const ucscMentorshipPlatform = {
     {
       id: "research",
       label: "Research",
-      title: "The current format has a high cost: administrative burden.",
+      title: "The root of the problem: matches aren’t the most compatible.",
       blocks: [
         { type: "image", src: mentorshipResearch, alt: "Research methods overview" },
         {
@@ -509,21 +495,15 @@ const ucscMentorshipPlatform = {
           text: "To understand current experiences in the Mentor Coalition program, we sent out a short **survey** and conducted **30-45 minute semi-structured interviews** with 4 mentors and 10 mentees that have participated in the program in the past year.",
         },
         {
-          type: "insight",
-          header: "Mentee-mentor connections often fade off by the end of the year.",
-        },
-        {
           type: "collapsible",
           label: "How we got here",
           text: "On FigJam, we employed affinity diagramming to synthesize insights from both research methods, leading to us extracting the following themes: program-specific issues, potential platform features, challenges with mentorship relationships, values and motivations, and structure/style preferences.",
-          tabs: [
-            { label: "Before", src: mentorshipAffinityBefore, alt: "Affinity diagram (before)" },
-            { label: "After", src: mentorshipAffinityAfter, alt: "Affinity diagram (after)" },
-          ],
+          src: mentorshipAffinityAfter,
+          alt: "Affinity diagram",
         },
         {
           type: "text",
-          text: "Relationships didn't last mostly because they weren't compatible from the start. Mentors and mentees pointed to misalignment in personalities, interests, and career goals.\n\nOne mentee interested in pursuing a PhD noted:",
+          text: "Relationships didn't last mostly because they weren't compatible from the start. Mentors and mentees pointed to misalignment in personalities, interests, and career goals.",
         },
         {
           type: "quote",
@@ -533,49 +513,35 @@ const ucscMentorshipPlatform = {
           type: "text",
           text: "This led us to prioritize improving the matching process over improving existing relationships.",
         },
-        { type: "subheading", label: "So how does matching work now?" },
+        { type: "subheading", label: "The Program Coordinator takes on the brunt of the admin work.", spaceBefore: true },
         {
           type: "text",
-          text: "To learn more about the current process behind the scenes, we spoke to 1 Program Coordinator. The key insight that surfaced was:",
-        },
-        {
-          type: "insight",
-          label: "Key Insight",
-          header: "The matching process costs time and administrative burden.",
-        },
-        {
-          type: "text",
-          text: "They singlehandedly organize the admin side manually, from collecting individual data to creating the pairings. This amount of work on one person means there's a lot of room for human error, so matches aren't the most optimal.",
+          text: "They singlehandedly organize the admin side manually, from collecting individual data to creating the pairings. This means there's room for error, so naturally, matches aren't the most optimal.",
         },
         { type: "image", src: currentProcess, alt: "Current matching process", narrow: true },
+        {
+          type: "challenge",
+          id: "challenge",
+          spaceBefore: true,
+          navLabel: "The challenge",
+          text: "How might we design a platform that…\n1) streamlines the administrative side of matching to create optimal pairings\n2) helps cultivate sustainable professional relationships in the program?",
+        },
       ],
     },
     {
       id: "building-the-mvp",
       label: "Building the MVP",
-      title: "Prioritizing the Matching Process",
+      title: "For the MVP, we prioritized building 3 requirements for the matching process.",
       blocks: [
-        { type: "text", text: "The team focused on the following 2 flows to include in the MVP:" },
         {
           type: "cards",
           items: [
-            {
-              label: "Onboarding",
-              description:
-                "Mentees and mentors complete an onboarding form, filling out background information and pairing preferences.",
-            },
-            {
-              label: "Matching Management",
-              description:
-                "The coordinator initiates the matching algorithm, creating pairings based on the form, reviews the results, and publishes.",
-            },
+            { label: "Roster", description: "View an up-to-date list of all current mentees and mentors." },
+            { label: "Matching", description: "Run the matching algorithm on select participants." },
+            { label: "Editing", description: "Allow for program coordinators to have the last say in matches." },
           ],
         },
-        {
-          type: "text",
-          text: "While half of the team focused on Onboarding for mentors and mentees, I led the end-to-end design of the Matching Management experience for program coordinator users.",
-        },
-        { type: "subheading", label: "Exploring design directions with sketching and Claude Design" },
+        { type: "subheading", label: "Exploring entry points and data visualizations with AI" },
         {
           type: "text",
           text: "My team and I proceeded to explore different design avenues through sketching and vibecoding before converging on a low-fidelity design.\n\nSimilar ways of displaying data emerged among our drawings, but our ideas diverged in the flow for navigating matching. Our entry points conflicted; one flow began with the Participant Roster, while other started with Rounds.",
@@ -591,12 +557,8 @@ const ucscMentorshipPlatform = {
           type: "text",
           text: "After discussing with the Program Coordinator, we ended up aligning on a flow where Matching was nested in Rounds. This took into account the case where the Coordinator wasn't satisfied with the algorithm's results and decided to run it again.",
         },
-        { type: "image", src: updatedFlow, alt: "Updated user flow", spaceAfter: true },
-        { type: "subheading", label: "Designing with FigmaMCP" },
-        {
-          type: "text",
-          text: "Using FigmaMCP, we fed the flow and our sketches into Claude to build out our designs on Figma.",
-        },
+        { type: "image", src: updatedFlow, alt: "Updated user flow", spaceAfter: true, padded: true },
+        { type: "subheading", label: "Using FigmaMCP, I created a prototype to validate with users and ensure technical feasibility.", spaceBefore: true },
         {
           type: "panel",
           label: "Rounds Overview",
@@ -662,7 +624,7 @@ const ucscMentorshipPlatform = {
     {
       id: "usability-testing",
       label: "Usability Testing",
-      title: "2 areas of iterations: Organization and Autonomy",
+      title: "User feedback revealed 2 areas of iterations: organization and autonomy.",
       blocks: [
         {
           type: "grid",
@@ -963,7 +925,6 @@ const zoomHybridInstruction = {
     ...placeholderProject(5).sectionTitles,
     problem: "Exploring Conversational AI in Hybrid Instruction",
   },
-  challengeDark: true,
   contextLabel: "Background",
   problem: {
     ...placeholderProject(5).problem,
