@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { projects } from "../data/projects";
@@ -1390,6 +1390,36 @@ function MediaGrid({ items, onImageClick, aspect = "aspect-video", grey = false 
 // Used both by the routed CaseStudy page and by CaseStudyPreviewModal, which
 // renders a child project's full case study inside an overlay without
 // changing the URL.
+// An image with Before / After tabs above it, matching the other Before /
+// After images. Each tab shows its own image, or a placeholder until one is
+// supplied.
+function BeforeAfterImage({ before, after, alt }) {
+  return (
+    <div className="min-w-0 [&>*]:mt-0">
+      <Tabs
+        tabs={[
+          { label: "After", src: after },
+          { label: "Before", src: before },
+        ].map((tab) => ({
+          label: tab.label,
+          content: (
+            <div className="flex items-center bg-gray-50 p-4">
+              {tab.src ? (
+                <ContentImage image={{ src: tab.src, alt: `${alt} (${tab.label.toLowerCase()})` }} />
+              ) : (
+                <PlaceholderImage
+                  label={`[Image placeholder — ${tab.label}]`}
+                  className="aspect-video w-full rounded-lg"
+                />
+              )}
+            </div>
+          ),
+        }))}
+      />
+    </div>
+  );
+}
+
 function ContentImage({ image, grey = false }) {
   return (
     <figure className="min-w-0">
@@ -1447,6 +1477,108 @@ function CollapsibleBlock({ block }) {
   );
 }
 
+// Media for one `rows` item: a looping video, an image, or a placeholder.
+function RowMedia({ row }) {
+  if (row.src && row.video) {
+    return <video src={row.src} autoPlay muted loop playsInline className="block" />;
+  }
+  if (row.src) return <img src={row.src} alt={row.text} className="block" />;
+  return <PlaceholderImage label="[Image placeholder]" />;
+}
+
+function useMediaQuery(query) {
+  const [matches, setMatches] = useState(() => window.matchMedia(query).matches);
+  useEffect(() => {
+    const mql = window.matchMedia(query);
+    const onChange = () => setMatches(mql.matches);
+    onChange();
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, [query]);
+  return matches;
+}
+
+// Scroll-driven steps. On desktop the laptop stays sticky on the right while
+// the captions scroll past on the left; the caption crossing the middle of the
+// viewport picks which media the laptop shows. On mobile each caption stacks
+// above its own laptop.
+function StickyRows({ items }) {
+  const isDesktop = useMediaQuery("(min-width: 640px)");
+  const [active, setActive] = useState(0);
+  const stepRefs = useRef([]);
+
+  useEffect(() => {
+    if (!isDesktop) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive(Number(entry.target.dataset.index));
+        });
+      },
+      { rootMargin: "-50% 0px -50% 0px" }
+    );
+    stepRefs.current.forEach((el) => el && observer.observe(el));
+    return () => observer.disconnect();
+  }, [isDesktop, items]);
+
+  if (!isDesktop) {
+    return (
+      <div className="mt-6 grid max-w-5xl gap-12">
+        {items.map((row) => (
+          <div key={row.text} className="grid gap-4">
+            <p className="text-base leading-relaxed text-gray-900">{parseRichText(row.text)}</p>
+            <MacbookFrame>
+              <RowMedia row={row} />
+            </MacbookFrame>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-6 grid max-w-5xl grid-cols-3 gap-6">
+      <div>
+        {items.map((row, j) => (
+          <div
+            key={row.text}
+            ref={(el) => (stepRefs.current[j] = el)}
+            data-index={j}
+            className="flex min-h-[70vh] items-center first:min-h-[50vh] first:items-start first:pt-[10vh]"
+          >
+            <p
+              className={`text-base leading-relaxed transition-colors duration-300 ${
+                active === j ? "text-gray-900" : "text-gray-300"
+              }`}
+            >
+              {parseRichText(row.text)}
+            </p>
+          </div>
+        ))}
+      </div>
+      <div className="col-span-2">
+        <div className="sticky top-[20vh]">
+          <MacbookFrame>
+            <div className="relative">
+              {items.map((row, j) => (
+                <div
+                  key={row.text}
+                  aria-hidden={active !== j}
+                  className={`absolute inset-0 transition-opacity duration-500 [&>*]:h-full [&>*]:w-full [&>*]:object-cover ${
+                    active === j ? "opacity-100" : "opacity-0"
+                  }`}
+                >
+                  <RowMedia row={row} />
+                </div>
+              ))}
+            </div>
+          </MacbookFrame>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Renders a section's freeform `blocks` (used by projects that define
 // `sections` instead of the fixed template fields).
 function ContentBlocks({ blocks }) {
@@ -1479,7 +1611,11 @@ function ContentBlocks({ blocks }) {
         return (
           <div key={i} className={`mt-6 max-w-5xl ${block.spaceAfter ? "mb-20" : ""}`}>
             <div className={block.narrow ? "mx-auto sm:w-4/5" : ""}>
-              <ContentImage image={block} grey={block.grey} />
+              {block.src ? (
+                <ContentImage image={block} grey={block.grey} />
+              ) : (
+                <PlaceholderImage label="[Image placeholder]" className="aspect-video w-full rounded-lg" />
+              )}
             </div>
           </div>
         );
@@ -1544,30 +1680,40 @@ function ContentBlocks({ blocks }) {
           </div>
         );
       case "rows":
-        // Grid of rows: a caption beside an image (or a placeholder until one
-        // is supplied). Alternates sides on desktop; stacks on mobile.
+        return <StickyRows key={i} items={block.items} />;
+      case "grid":
+        // Two columns per row: a label + description on the left (one third)
+        // and an image on the right (two thirds), with a Before / After toggle
+        // when the row has beforeSrc / afterSrc.
         return (
-          <div key={i} className="mt-6 grid max-w-5xl gap-12 sm:gap-20">
-            {block.items.map((row, j) => (
-              <div
-                key={row.text}
-                className="grid items-center gap-4 sm:grid-cols-3 sm:gap-6"
-              >
-                <p
-                  className={`text-base leading-relaxed text-gray-900 ${j % 2 ? "sm:order-last" : ""}`}
-                >
-                  {parseRichText(row.text)}
-                </p>
-                <MacbookFrame className="sm:col-span-2">
-                  {row.src && row.video ? (
-                    <video src={row.src} autoPlay muted loop playsInline className="block" />
-                  ) : row.src ? (
-                    <img src={row.src} alt={row.text} className="block" />
-                  ) : (
-                    <PlaceholderImage label="[Image placeholder]" />
+          <div key={i} className="mt-6 grid max-w-5xl items-center gap-x-8 gap-y-6 sm:grid-cols-3 sm:gap-y-16">
+            {block.items.map((row) => (
+              <Fragment key={row.label}>
+                <div className="self-center">
+                  <p className="text-sm font-semibold text-gray-900">{row.label}</p>
+                  {row.description && (
+                    <p className="mt-2 text-sm leading-relaxed text-gray-700">
+                      {parseRichText(row.description)}
+                    </p>
                   )}
-                </MacbookFrame>
-              </div>
+                  {row.quote && (
+                    <blockquote className="mt-4 border-l-2 border-gray-900 pl-4">
+                      <p className="font-serif text-base font-light italic leading-relaxed text-gray-900">
+                        “{row.quote}”
+                      </p>
+                    </blockquote>
+                  )}
+                </div>
+                <div className="min-w-0 sm:col-span-2">
+                  {row.beforeSrc || row.afterSrc ? (
+                    <BeforeAfterImage before={row.beforeSrc} after={row.afterSrc} alt={row.label} />
+                  ) : row.src ? (
+                    <ContentImage image={{ src: row.src, alt: row.label }} />
+                  ) : (
+                    <PlaceholderImage label="[Image placeholder]" className="aspect-video w-full rounded-lg" />
+                  )}
+                </div>
+              </Fragment>
             ))}
           </div>
         );
@@ -1691,7 +1837,7 @@ function CaseStudyContent({
   const sectionSubsections =
     project.sections &&
     Object.fromEntries(
-      project.sections.map((section) => [
+      project.sections.filter((section) => !section.hidden).map((section) => [
         section.id,
         section.blocks
           .map((block) =>
@@ -1854,7 +2000,7 @@ function CaseStudyContent({
         </Block>
 
         {project.sections ? (
-          project.sections.map((section) => (
+          project.sections.filter((section) => !section.hidden).map((section) => (
             <Block
               key={section.id}
               id={section.id}

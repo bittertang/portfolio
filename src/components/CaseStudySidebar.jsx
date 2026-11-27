@@ -26,7 +26,7 @@ function getSections(project) {
   if (project.sections) {
     return [
       !project.hideOverview && { id: "overview", label: "Overview" },
-      ...project.sections.map((s) => ({ id: s.id, label: s.label })),
+      ...project.sections.filter((s) => !s.hidden).map((s) => ({ id: s.id, label: s.label })),
     ].filter(Boolean);
   }
   return [

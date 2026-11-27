@@ -44,6 +44,9 @@ import runningMatches2 from "../assets/mentorship-platform/v2/running-matches-2.
 import editMatch from "../assets/mentorship-platform/v2/edit-match.webp";
 import ideationSketches from "../assets/mentorship-platform/v2/ideation-sketches.webp";
 import cuttingDown from "../assets/mentorship-platform/v2/cutting-down.webp";
+import createRoundBefore from "../assets/mentorship-platform/CreateRound_Before.png";
+import createRoundAfter from "../assets/mentorship-platform/CreateRound_After.png";
+import createRoundLockMatches from "../assets/mentorship-platform/CreateRound_LockMatches.png";
 import panelExplorations from "../assets/geology-map/panel-explorations.webp";
 import geologyMapHero from "../assets/geology-map/hero.mp4";
 import finalProjection from "../assets/geology-map/final_projection.mp4";
@@ -530,7 +533,7 @@ const ucscMentorshipPlatform = {
           type: "text",
           text: "This led us to prioritize improving the matching process over improving existing relationships.",
         },
-        { type: "subheading", label: "How does the matching currently work?" },
+        { type: "subheading", label: "So how does matching work now?" },
         {
           type: "text",
           text: "To learn more about the current process behind the scenes, we spoke to 1 Program Coordinator. The key insight that surfaced was:",
@@ -624,6 +627,7 @@ const ucscMentorshipPlatform = {
     },
     {
       id: "in-app-experience",
+      hidden: true,
       label: "In-app Experience",
       title: "Platform MVP: Mentor Directory and Profile",
       blocks: [
@@ -650,6 +654,32 @@ const ucscMentorshipPlatform = {
               label: "Mentor Profiles",
               description: "Learn more about a mentor and their background.",
               src: mentorProfile,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "usability-testing",
+      label: "Usability Testing",
+      title: "2 areas of iterations: Organization and Autonomy",
+      blocks: [
+        {
+          type: "grid",
+          items: [
+            {
+              label: "Keep users grounded",
+              description:
+                "I reorganized the information hierarchy to make creating a round a more distinctive user action. Round creation now lives in a modal, with an added progress bar so that Admin knows what to expect.",
+              quote: "I wasn’t sure where I was and at what point I would be getting the actual results.",
+              beforeSrc: createRoundBefore,
+              afterSrc: createRoundAfter,
+            },
+            {
+              label: "Adding more human touch",
+              description:
+                "Admin brought up instances where they believed certain individuals could be good matches, which the algorithm would never be able to take into account. I added a step where they could lock in matches before running the algorithm.",
+              src: createRoundLockMatches,
             },
           ],
         },
